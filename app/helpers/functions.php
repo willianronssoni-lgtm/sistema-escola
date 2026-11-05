@@ -448,7 +448,7 @@ function flash_html(): string {
             default => 'alert-info'
         };
         $html .= "<div class=\"alert $alert_class alert-dismissible fade show\" role=\"alert\">
-            {$flash['mensagem']}
+            <?= e((string)$flash['mensagem']) ?>
             <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\"></button>
         </div>";
     }
