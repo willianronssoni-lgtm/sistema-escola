@@ -1,0 +1,20 @@
+name: Testes PHP
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: Verificar sintaxe PHP
+        run: find app public views tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Executar testes unitários
+        run: php tests/run.php
