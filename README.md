@@ -53,3 +53,12 @@ A base possui autenticação, catálogo, reservas, fila e páginas do aluno. A �
 - Use HTTPS em produção.
 - Mantenha `DEBUG=0` em produção.
 - Faça backup antes de migrações.
+
+## Planejamento do projeto
+
+Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) para entender:
+- como o sistema deverá funcionar para alunos e bibliotecários;
+- quais regras de empréstimo e reserva estão previstas;
+- quais tecnologias e estrutura serão utilizadas;
+- as etapas de desenvolvimento e os critérios de conclusão.
+
