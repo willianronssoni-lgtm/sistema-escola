@@ -62,3 +62,15 @@ Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) para entender:
 - quais tecnologias e estrutura serão utilizadas;
 - as etapas de desenvolvimento e os critérios de conclusão.
 
+
+## Publicação de teste no Railway
+
+O repositório inclui `Dockerfile` e `railway.json` para executar PHP/Apache no Railway.
+
+1. Conecte o Railway à sua conta GitHub e selecione este repositório.
+2. Adicione um serviço **MySQL** ao projeto Railway.
+3. Configure a aplicação com as referências do MySQL: `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER` e `MYSQLPASSWORD` (o código já reconhece essas variáveis). Também defina `APP_URL` com o domínio público gerado e `DEBUG=0`.
+4. No banco MySQL recém-criado e vazio, execute `sql/railway-schema.sql`. Ele cria as tabelas no banco selecionado sem apagar nem criar bancos.
+5. Para uma demonstração com dados fictícios, importe `sql/seed.sql` somente nesse banco de teste. **Ele apaga os registros existentes das tabelas**. A conta demonstrativa é matrícula `BIB001`, senha `123456`; altere-a antes de qualquer uso real.
+
+Não publique dados reais de alunos em uma instância de demonstração. O sistema ainda requer validação de integração antes de uso em produção.
