@@ -8,7 +8,7 @@ $db = db();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csfr_verify($_POST['csrf_token'] ?? '')) {
-        flash('danger', 'Sessão expirada. Atualize a página e tente novamente.');
+        flash('erro', 'Sessão expirada. Atualize a página e tente novamente.');
         redirect('/biblioteca/public/painel.php');
     }
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'senha' => $senha, 'tipo' => 'aluno', 'email' => trim($_POST['email'] ?? '')
             ]);
             if (!$resultado['sucesso']) throw new RuntimeException($resultado['erro']);
-            flash('success', 'Aluno cadastrado com sucesso.');
+            flash('sucesso', 'Aluno cadastrado com sucesso.');
         } elseif ($acao === 'livro') {
             $titulo = trim($_POST['titulo'] ?? '');
             $autor = trim($_POST['autor'] ?? '');
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$obraId, $tombo, trim($_POST['localizacao'] ?? '') ?: null]);
             $db->commit();
             registrar_log('cadastro_obra', 'obras', $obraId, ['titulo' => $titulo, 'tombo' => $tombo]);
-            flash('success', 'Livro e exemplar adicionados ao acervo.');
+            flash('sucesso', 'Livro e exemplar adicionados ao acervo.');
         } elseif ($acao === 'emprestimo') {
             $alunoId = (int)($_POST['aluno_id'] ?? 0);
             $exemplarId = (int)($_POST['exemplar_id'] ?? 0);
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->commit();
             registrar_log('emprestimo_criado', 'emprestimos', (int)$db->lastInsertId(), ['usuario_id' => $alunoId, 'exemplar_id' => $exemplarId]);
             criar_notificacao($alunoId, 'devolucao_proxima', 'Empréstimo registrado', 'A devolução está prevista para ' . format_date($prevista) . '.', '/biblioteca/public/meus-emprestimos.php');
-            flash('success', 'Empréstimo registrado. Devolução prevista para ' . format_date($prevista) . '.');
+            flash('sucesso', 'Empréstimo registrado. Devolução prevista para ' . format_date($prevista) . '.');
         } elseif ($acao === 'devolucao') {
             $emprestimoId = (int)($_POST['emprestimo_id'] ?? 0);
             $db->beginTransaction();
@@ -100,14 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $db->commit();
             registrar_log('emprestimo_devolvido', 'emprestimos', $emprestimoId, ['dias_atraso' => $atraso]);
-            flash('success', $atraso > 0 ? "Devolução registrada com {$atraso} dia(s) de atraso." : 'Devolução registrada com sucesso.');
+            flash('sucesso', $atraso > 0 ? "Devolução registrada com {$atraso} dia(s) de atraso." : 'Devolução registrada com sucesso.');
         } else {
             throw new InvalidArgumentException('Operação não reconhecida.');
         }
     } catch (Throwable $e) {
         if ($db->inTransaction()) $db->rollBack();
         error_log('Painel da biblioteca: ' . $e->getMessage());
-        flash('danger', $e instanceof PDOException ? 'Não foi possível concluir. Verifique os dados e se a matrícula/tombo já existem.' : $e->getMessage());
+        flash('erro', $e instanceof PDOException ? 'Não foi possível concluir. Verifique os dados e se a matrícula/tombo já existem.' : $e->getMessage());
     }
     redirect('/biblioteca/public/painel.php');
 }
