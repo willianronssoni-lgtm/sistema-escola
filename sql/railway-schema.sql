@@ -1,0 +1,3 @@
+-- Esquema inicial para MySQL/MariaDB provisionado no Railway.
+-- Selecione o banco da aplicação antes de executar este arquivo.
+-- Diferente de schema.sql, este arquivo NÃO apaga nem cria bancos de dados.
