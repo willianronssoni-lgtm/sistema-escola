@@ -1,6 +1,6 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
   <div><h1 class="h3 mb-1">Painel do bibliotecário</h1><p class="text-muted mb-0">Visão geral e operações da biblioteca escolar.</p></div>
-  <span class="badge text-bg-primary">Demonstração</span>
+  <span class="badge text-bg-success">Área administrativa</span>
 </div>
 <div class="row g-3 mb-4">
 <?php foreach (['alunos'=>'Alunos ativos','obras'=>'Títulos no acervo','disponiveis'=>'Exemplares disponíveis','ativos'=>'Empréstimos ativos'] as $key=>$label): ?>
@@ -13,6 +13,7 @@
    <div class="mb-2"><label class="form-label">Matrícula</label><input class="form-control" name="matricula" maxlength="20" required></div>
    <div class="mb-2"><label class="form-label">Nome completo</label><input class="form-control" name="nome" maxlength="120" required></div>
    <div class="mb-2"><label class="form-label">Turma</label><input class="form-control" name="turma" maxlength="20"></div>
+   <div class="mb-2"><label class="form-label">E-mail (opcional)</label><input class="form-control" type="email" name="email" maxlength="150"></div>
    <div class="mb-3"><label class="form-label">Senha inicial</label><input class="form-control" type="password" name="senha" minlength="6" required></div>
    <button class="btn btn-primary">Cadastrar aluno</button>
   </form>
@@ -22,6 +23,9 @@
    <div class="mb-2"><label class="form-label">Título</label><input class="form-control" name="titulo" maxlength="200" required></div>
    <div class="mb-2"><label class="form-label">Autor</label><input class="form-control" name="autor" maxlength="150" required></div>
    <div class="mb-2"><label class="form-label">Categoria</label><input class="form-control" name="categoria" maxlength="80"></div>
+   <div class="row"><div class="col-md-6 mb-2"><label class="form-label">ISBN</label><input class="form-control" name="isbn" maxlength="20"></div><div class="col-md-6 mb-2"><label class="form-label">Ano</label><input class="form-control" type="number" name="ano" min="1000" max="2155"></div></div>
+   <div class="mb-2"><label class="form-label">Editora</label><input class="form-control" name="editora" maxlength="100"></div>
+   <div class="mb-3"><label class="form-label">Localização</label><input class="form-control" name="localizacao" maxlength="80" placeholder="Ex.: Estante A1"></div>
    <div class="mb-3"><label class="form-label">Tombo do exemplar</label><input class="form-control" name="tombo" maxlength="30" required></div>
    <button class="btn btn-primary">Adicionar ao acervo</button>
   </form>
