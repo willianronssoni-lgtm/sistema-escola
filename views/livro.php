@@ -23,8 +23,8 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
     <div class="col-md-9">
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/biblioteca/public/index.php">Início</a></li>
-                <li class="breadcrumb-item"><a href="/biblioteca/public/catalogo.php">Catálogo</a></li>
+                <li class="breadcrumb-item"><a href="<?= url('index.php') ?>">Início</a></li>
+                <li class="breadcrumb-item"><a href="<?= url('catalogo.php') ?>">Catálogo</a></li>
                 <li class="breadcrumb-item active"><?= e($obra['titulo']) ?></li>
             </ol>
         </nav>
@@ -55,7 +55,7 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
             <?php endif; ?>
             <?php if ($obra['categoria']): ?>
                 <div class="col-md-4"><small class="text-muted">Categoria</small><br>
-                    <a href="/biblioteca/public/catalogo.php?categoria=<?= urlencode($obra['categoria']) ?>" class="text-decoration-none">
+                    <a href="<?= url('catalogo.php') ?>?categoria=<?= urlencode($obra['categoria']) ?>" class="text-decoration-none">
                         <span class="badge bg-secondary"><?= e($obra['categoria']) ?></span>
                     </a>
                 </div>
@@ -75,7 +75,7 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <strong>Exemplares (<?= count($obra['exemplares']) ?>)</strong>
                     <?php if (is_bibliotecario()): ?>
-                        <a href="/biblioteca/public/exemplar-novo.php?obra_id=<?= $obra['id'] ?>" class="btn btn-sm btn-outline-primary">
+                        <a href="<?= url('acervo.php') ?>" class="btn btn-sm btn-outline-primary">
                             <i class="bi bi-plus me-1"></i>Novo exemplar
                         </a>
                     <?php endif; ?>
@@ -99,7 +99,7 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
                                         <td><?= e($ex['localizacao'] ?? '-') ?></td>
                                         <?php if (is_bibliotecario()): ?>
                                             <td>
-                                                <a href="/biblioteca/public/exemplar-editar.php?id=<?= $ex['id'] ?>" class="btn btn-sm btn-outline-secondary" title="Editar">
+                                                <a href="<?= url('acervo.php') ?>" class="btn btn-sm btn-outline-secondary" title="Editar no acervo">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
                                             </td>
@@ -128,7 +128,7 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
                                 <span class="badge bg-danger ms-2"><?= $emprestimo_ativo['dias_atraso'] ?> dia(s) de atraso</span>
                             <?php endif; ?>
                             <?php if (!$emprestimo_ativo['renovado']): ?>
-                                <a href="/biblioteca/public/renovar.php?id=<?= $emprestimo_ativo['id'] ?>" class="btn btn-sm btn-outline-primary ms-2">Renovar</a>
+                                <a href="<?= url('renovar.php') ?>?id=<?= $emprestimo_ativo['id'] ?>" class="btn btn-sm btn-outline-primary ms-2">Renovar</a>
                             <?php endif; ?>
                         </div>
                     <?php elseif ($reserva_ativa): ?>
@@ -156,25 +156,25 @@ $emprestimo_ativo = $emprestimo_ativo ?? null;
                     <?php else: ?>
                         <?php if ($obra['disponiveis'] > 0): ?>
                             <div class="d-flex gap-2 flex-wrap">
-                                <form method="post" action="/biblioteca/public/reservar.php">
+                                <form method="post" action="<?= url('reservar.php') ?>">
                                     <?= csfr_input() ?>
                                     <input type="hidden" name="obra_id" value="<?= $obra['id'] ?>">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="bi bi-bookmark-plus me-1"></i>Reservar exemplar disponível
                                     </button>
                                 </form>
-                                <a href="/biblioteca/public/catalogo.php" class="btn btn-outline-secondary">Voltar ao catálogo</a>
+                                <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-secondary">Voltar ao catálogo</a>
                             </div>
                         <?php else: ?>
                             <div class="d-flex gap-2 flex-wrap">
-                                <form method="post" action="/biblioteca/public/entrar-fila.php">
+                                <form method="post" action="<?= url('entrar-fila.php') ?>">
                                     <?= csfr_input() ?>
                                     <input type="hidden" name="obra_id" value="<?= $obra['id'] ?>">
                                     <button type="submit" class="btn btn-warning">
                                         <i class="bi bi-person-lines-fill me-1"></i>Entrar na fila de espera
                                     </button>
                                 </form>
-                                <a href="/biblioteca/public/catalogo.php" class="btn btn-outline-secondary">Voltar ao catálogo</a>
+                                <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-secondary">Voltar ao catálogo</a>
                             </div>
                             <p class="text-muted small mt-2 mb-0">Todos os exemplares estão emprestados. Entre na fila para ser avisado quando um ficar disponível.</p>
                         <?php endif; ?>

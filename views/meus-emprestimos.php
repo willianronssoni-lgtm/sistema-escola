@@ -51,7 +51,7 @@ $suspenso_ate = $suspenso_ate ?? null;
                                             </div>
                                         <?php endif; ?>
                                         <div>
-                                            <a href="/biblioteca/public/livro.php?id=<?= $emp['obra_id'] ?>" class="text-decoration-none fw-semibold"><?= e($emp['titulo']) ?></a>
+                                            <a href="<?= url('livro.php') ?>?id=<?= $emp['obra_id'] ?>" class="text-decoration-none fw-semibold"><?= e($emp['titulo']) ?></a>
                                             <br><small class="text-muted">Tombo: <code><?= e($emp['tombo']) ?></code></small>
                                         </div>
                                     </div>
@@ -75,11 +75,11 @@ $suspenso_ate = $suspenso_ate ?? null;
                                 <td>
                                     <div class="btn-group btn-group-sm">
                                         <?php if ($emp['dias_atraso'] === 0 && !$emp['renovado']): ?>
-                                            <a href="/biblioteca/public/renovar.php?id=<?= $emp['id'] ?>" class="btn btn-outline-primary" title="Renovar por mais 15 dias">
+                                            <a href="<?= url('renovar.php') ?>?id=<?= $emp['id'] ?>" class="btn btn-outline-primary" title="Renovar por mais 15 dias">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </a>
                                         <?php endif; ?>
-                                        <a href="/biblioteca/public/livro.php?id=<?= $emp['obra_id'] ?>" class="btn btn-outline-secondary" title="Ver livro">
+                                        <a href="<?= url('livro.php') ?>?id=<?= $emp['obra_id'] ?>" class="btn btn-outline-secondary" title="Ver livro">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                     </div>
@@ -116,7 +116,7 @@ $suspenso_ate = $suspenso_ate ?? null;
                         <?php foreach ($historico as $emp): ?>
                             <tr>
                                 <td>
-                                    <a href="/biblioteca/public/livro.php?id=<?= $emp['obra_id'] ?>" class="text-decoration-none fw-semibold"><?= e($emp['titulo']) ?></a>
+                                    <a href="<?= url('livro.php') ?>?id=<?= $emp['obra_id'] ?>" class="text-decoration-none fw-semibold"><?= e($emp['titulo']) ?></a>
                                     <br><small class="text-muted">Tombo: <code><?= e($emp['tombo']) ?></code></small>
                                 </td>
                                 <td><?= format_date($emp['data_retirada']) ?></td>

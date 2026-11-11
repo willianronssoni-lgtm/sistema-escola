@@ -58,7 +58,7 @@ $destaques = $destaques ?? [];
             <h3 class="h5 mb-3"><i class="bi bi-lightning-fill me-2"></i>Ações Rápidas</h3>
         </div>
         <div class="col-6 col-md-3">
-            <a href="/biblioteca/public/catalogo.php" class="card action-card h-100 text-decoration-none">
+            <a href="<?= url('catalogo.php') ?>" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-search fs-1 text-primary"></i>
                     <h5 class="mt-2 mb-0">Buscar Livros</h5>
@@ -67,7 +67,7 @@ $destaques = $destaques ?? [];
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="/biblioteca/public/minhas-reservas.php" class="card action-card h-100 text-decoration-none">
+            <a href="<?= url('minhas-reservas.php') ?>" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-bookmark-check fs-1 text-warning"></i>
                     <h5 class="mt-2 mb-0">Minhas Reservas</h5>
@@ -76,7 +76,7 @@ $destaques = $destaques ?? [];
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="/biblioteca/public/meus-emprestimos.php" class="card action-card h-100 text-decoration-none">
+            <a href="<?= url('meus-emprestimos.php') ?>" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-journal-bookmark fs-1 text-success"></i>
                     <h5 class="mt-2 mb-0">Meus Empréstimos</h5>
@@ -85,7 +85,7 @@ $destaques = $destaques ?? [];
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="/biblioteca/public/notificacoes.php" class="card action-card h-100 text-decoration-none">
+            <a href="<?= url('notificacoes.php') ?>" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-bell fs-1 text-danger"></i>
                     <h5 class="mt-2 mb-0">Notificações</h5>
@@ -101,7 +101,7 @@ $destaques = $destaques ?? [];
     <div class="row mb-5">
         <div class="col-12 d-flex justify-content-between align-items-center mb-3">
             <h3 class="h5 mb-0"><i class="bi bi-star-fill me-2 text-warning"></i>Disponíveis no Momento</h3>
-            <a href="/biblioteca/public/catalogo.php?disponiveis=1" class="btn btn-sm btn-outline-primary">Ver todos</a>
+            <a href="<?= url('catalogo.php') ?>?disponiveis=1" class="btn btn-sm btn-outline-primary">Ver todos</a>
         </div>
         
         <div class="row g-3">
@@ -120,7 +120,7 @@ $destaques = $destaques ?? [];
                             <p class="card-text text-muted small mb-1"><?= e($obra['autor']) ?></p>
                             <div class="mt-auto d-flex justify-content-between align-items-center">
                                 <span class="badge bg-success"><?= (int)$obra['disp'] ?> disp.</span>
-                                <a href="/biblioteca/public/livro.php?id=<?= $obra['id'] ?>" class="btn btn-sm btn-outline-primary">Ver</a>
+                                <a href="<?= url('livro.php') ?>?id=<?= $obra['id'] ?>" class="btn btn-sm btn-outline-primary">Ver</a>
                             </div>
                         </div>
                     </div>

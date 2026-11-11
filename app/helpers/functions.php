@@ -29,6 +29,23 @@ function csfr_input(): string {
 }
 
 // ============================================================
+// URLs
+// ============================================================
+
+/**
+ * Monta a URL pública de uma página do sistema.
+ * Evita caminhos fixos (ex.: /biblioteca/public) que quebram quando
+ * a aplicação é publicada na raiz do domínio.
+ */
+function url(string $caminho = ''): string {
+    $base = rtrim(APP_URL, '/');
+    if ($caminho === '') {
+        return $base . '/';
+    }
+    return $base . '/' . ltrim($caminho, '/');
+}
+
+// ============================================================
 // AUTENTICAÇÃO E AUTORIZAÇÃO
 // ============================================================
 
@@ -54,21 +71,21 @@ function is_bibliotecario(): bool {
 
 function require_login(): void {
     if (!usuario_logado()) {
-        redirect('/login.php');
+        redirect(url('login.php'));
     }
 }
 
 function require_aluno(): void {
     require_login();
     if (!is_aluno()) {
-        redirect('/painel.php');
+        redirect(url('painel.php'));
     }
 }
 
 function require_bibliotecario(): void {
     require_login();
     if (!is_bibliotecario()) {
-        redirect('/index.php');
+        redirect(url('index.php'));
     }
 }
 
@@ -84,22 +101,22 @@ function usuario_pode_emprestar(int $usuario_id): array {
         return ['pode' => false, 'motivo' => 'Usuário suspenso até ' . format_date($user['suspenso_ate'])];
     }
     
-    // Verificar empréstimos ativos
-    $stmt = $db->prepare("SELECT COUNT(*) as total FROM emprestimos WHERE usuario_id = ? AND data_devolucao IS NULL");
-    $stmt->execute([$usuario_id]);
-    $ativos = (int)$stmt->fetchColumn();
-    
-    if ($ativos >= MAX_EMPRESTIMOS_SIMULTANEOS) {
-        return ['pode' => false, 'motivo' => "Limite de $MAX_EMPRESTIMOS_SIMULTANEOS empréstimos simultâneos atingido"];
-    }
-    
-    // Verificar empréstimos atrasados
+    // Verificar empréstimos atrasados (motivo mais específico que o limite)
     $stmt = $db->prepare("SELECT COUNT(*) as total FROM emprestimos WHERE usuario_id = ? AND data_devolucao IS NULL AND data_prevista_devolucao < CURDATE()");
     $stmt->execute([$usuario_id]);
     $atrasados = (int)$stmt->fetchColumn();
     
     if ($atrasados > 0) {
         return ['pode' => false, 'motivo' => 'Possui empréstimo(s) em atraso'];
+    }
+    
+    // Verificar limite de empréstimos simultâneos
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM emprestimos WHERE usuario_id = ? AND data_devolucao IS NULL");
+    $stmt->execute([$usuario_id]);
+    $ativos = (int)$stmt->fetchColumn();
+    
+    if ($ativos >= MAX_EMPRESTIMOS_SIMULTANEOS) {
+        return ['pode' => false, 'motivo' => 'Limite de ' . MAX_EMPRESTIMOS_SIMULTANEOS . ' empréstimos simultâneos atingido'];
     }
     
     return ['pode' => true, 'motivo' => ''];
@@ -322,11 +339,12 @@ function posicao_fila(int $obra_id, int $usuario_id): ?int {
 function proximo_da_fila(int $obra_id): ?array {
     $db = db();
     $stmt = $db->prepare("
-        SELECT r.*, u.nome, u.matricula, u.turma
+        SELECT r.*, o.titulo AS obra_titulo, u.nome, u.matricula, u.turma
         FROM reservas r
+        JOIN obras o ON o.id = r.obra_id
         JOIN usuarios u ON u.id = r.usuario_id
         WHERE r.obra_id = ? AND r.status = 'na_fila'
-        ORDER BY r.data_reserva
+        ORDER BY r.data_reserva, r.id
         LIMIT 1
     ");
     $stmt->execute([$obra_id]);

@@ -6,4 +6,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         logout();
     }
 }
-redirect('/biblioteca/public/index.php');
+redirect(url('index.php'));

@@ -5,7 +5,7 @@ $reservas = $reservas ?? [];
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><i class="bi bi-bookmark-check me-2"></i>Minhas Reservas</h1>
-    <a href="/biblioteca/public/catalogo.php" class="btn btn-outline-primary">
+    <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-primary">
         <i class="bi bi-plus me-1"></i>Buscar mais livros
     </a>
 </div>
@@ -15,7 +15,7 @@ $reservas = $reservas ?? [];
         <i class="bi bi-bookmark-x fs-1 text-muted"></i>
         <h4 class="mt-3 text-muted">Nenhuma reserva</h4>
         <p class="text-muted">Você não tem reservas ativas ou no histórico</p>
-        <a href="/biblioteca/public/catalogo.php" class="btn btn-primary">Explorar catálogo</a>
+        <a href="<?= url('catalogo.php') ?>" class="btn btn-primary">Explorar catálogo</a>
     </div>
 <?php else: ?>
     <div class="row g-3">
@@ -35,7 +35,7 @@ $reservas = $reservas ?? [];
                             </div>
                             <div class="col">
                                 <h6 class="mb-1">
-                                    <a href="/biblioteca/public/livro.php?id=<?= $r['obra_id'] ?>" class="text-decoration-none text-dark">
+                                    <a href="<?= url('livro.php') ?>?id=<?= $r['obra_id'] ?>" class="text-decoration-none text-dark">
                                         <?= e($r['titulo']) ?>
                                     </a>
                                 </h6>
@@ -70,7 +70,7 @@ $reservas = $reservas ?? [];
                         
                         <?php if ($r['status'] === 'confirmada' || $r['status'] === 'na_fila' || $r['status'] === 'pendente'): ?>
                             <hr class="my-2">
-                            <form method="post" action="/biblioteca/public/cancelar-reserva.php" class="d-inline" onsubmit="return confirm('Cancelar esta reserva?')">
+                            <form method="post" action="<?= url('cancelar-reserva.php') ?>" class="d-inline" onsubmit="return confirm('Cancelar esta reserva?')">
                                 <?= csfr_input() ?>
                                 <input type="hidden" name="reserva_id" value="<?= $r['id'] ?>">
                                 <button type="submit" class="btn btn-sm btn-outline-danger">

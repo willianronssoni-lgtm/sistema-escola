@@ -46,7 +46,7 @@ $categorias = $categorias ?? [];
                 <button type="submit" class="btn btn-primary flex-grow-1">
                     <i class="bi bi-search me-1"></i>Filtrar
                 </button>
-                <a href="/biblioteca/public/catalogo.php" class="btn btn-outline-secondary">
+                <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-secondary">
                     <i class="bi bi-x-circle me-1"></i>Limpar
                 </a>
             </div>
@@ -60,7 +60,7 @@ $categorias = $categorias ?? [];
         <i class="bi bi-book fs-1 text-muted"></i>
         <h4 class="mt-3 text-muted">Nenhum livro encontrado</h4>
         <p class="text-muted">Tente alterar os filtros ou buscar por outro termo</p>
-        <a href="/biblioteca/public/catalogo.php" class="btn btn-outline-primary">Ver todos</a>
+        <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-primary">Ver todos</a>
     </div>
 <?php else: ?>
     <div class="row g-3">
@@ -79,7 +79,7 @@ $categorias = $categorias ?? [];
                     </div>
                     <div class="card-body d-flex flex-column">
                         <h6 class="card-title text-truncate" title="<?= e($obra['titulo']) ?>">
-                            <a href="/biblioteca/public/livro.php?id=<?= $obra['id'] ?>" class="text-decoration-none text-dark stretched-link">
+                            <a href="<?= url('livro.php') ?>?id=<?= $obra['id'] ?>" class="text-decoration-none text-dark stretched-link">
                                 <?= e($obra['titulo']) ?>
                             </a>
                         </h6>
@@ -88,7 +88,7 @@ $categorias = $categorias ?? [];
                             <small class="text-muted">
                                 <?= (int)$obra['disponiveis'] ?> de <?= (int)$obra['total_exemplares'] ?> disp.
                             </small>
-                            <a href="/biblioteca/public/livro.php?id=<?= $obra['id'] ?>" class="btn btn-sm btn-outline-primary">Ver</a>
+                            <a href="<?= url('livro.php') ?>?id=<?= $obra['id'] ?>" class="btn btn-sm btn-outline-primary">Ver</a>
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@ $categorias = $categorias ?? [];
     </div>
     
     <!-- Paginação -->
-    <?= paginacao($total, $por_pagina, $pagina, '/biblioteca/public/catalogo.php', [
+    <?= paginacao($total, $por_pagina, $pagina, url('catalogo.php'), [
         'q' => $filtros['busca'],
         'categoria' => $filtros['categoria'],
         'disponiveis' => $filtros['so_disponiveis'] ? '1' : '',

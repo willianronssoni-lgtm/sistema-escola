@@ -3,13 +3,13 @@ require_once __DIR__ . '/../app/config/config.php';
 
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) {
-    redirect('/biblioteca/public/catalogo.php');
+    redirect(url('catalogo.php'));
 }
 
 $obra = buscar_obra_por_id($id);
 if (!$obra) {
     flash('erro', 'Livro não encontrado');
-    redirect('/biblioteca/public/catalogo.php');
+    redirect(url('catalogo.php'));
 }
 
 // Verificar se aluno já tem reserva ativa para esta obra

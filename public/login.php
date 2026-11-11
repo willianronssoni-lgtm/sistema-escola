@@ -3,7 +3,7 @@ require_once __DIR__ . '/../app/config/config.php';
 
 // Se já logado, redirecionar
 if (usuario_logado()) {
-    redirect(is_bibliotecario() ? '/biblioteca/public/painel.php' : '/biblioteca/public/index.php');
+    redirect(is_bibliotecario() ? url('painel.php') : url('index.php'));
 }
 
 $erro = '';
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $resultado = login($matricula, $senha);
             if ($resultado['sucesso']) {
-                redirect(is_bibliotecario() ? '/biblioteca/public/painel.php' : '/biblioteca/public/index.php');
+                redirect(is_bibliotecario() ? url('painel.php') : url('index.php'));
             } else {
                 $erro = $resultado['erro'];
             }

@@ -3,18 +3,18 @@ require_once __DIR__ . '/../app/config/config.php';
 require_aluno();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('/biblioteca/public/catalogo.php');
+    redirect(url('catalogo.php'));
 }
 
 if (!csfr_verify($_POST['csrf_token'] ?? '')) {
     flash('erro', 'Token inválido');
-    redirect('/biblioteca/public/livro.php?id=' . ($_POST['obra_id'] ?? 0));
+    redirect(url('livro.php') . '?id=' . ($_POST['obra_id'] ?? 0));
 }
 
 $obra_id = (int)($_POST['obra_id'] ?? 0);
 if (!$obra_id) {
     flash('erro', 'Livro inválido');
-    redirect('/biblioteca/public/catalogo.php');
+    redirect(url('catalogo.php'));
 }
 
 $db = db();
@@ -66,7 +66,7 @@ try {
     }
     
     // Criar reserva confirmada com exemplar atribuído
-    $data_expiracao = date('Y-m-d H:i:s', strtotime('+48 hours'));
+    $data_expiracao = date('Y-m-d H:i:s', strtotime('+' . PRAZO_RESERVA_HORAS . ' hours'));
     $stmt = $db->prepare("
         INSERT INTO reservas (usuario_id, obra_id, exemplar_id, status, data_confirmacao, data_expiracao)
         VALUES (?, ?, ?, 'confirmada', NOW(), ?)
@@ -82,7 +82,7 @@ try {
     criar_notificacao(usuario_id(), 'reserva_confirmada', 
         'Reserva confirmada: ' . $obra['titulo'],
         'Sua reserva foi confirmada. Retire o exemplar (Tombo: ' . $exemplar['tombo'] . ') na biblioteca até ' . format_datetime($data_expiracao) . '.',
-        '/biblioteca/public/minhas-reservas.php'
+        url('minhas-reservas.php')
     );
     
     registrar_log('reserva_criada', 'reservas', $reserva_id, ['obra_id' => $obra_id, 'exemplar_id' => $exemplar['id']]);
@@ -95,4 +95,4 @@ try {
     flash('erro', $e->getMessage());
 }
 
-redirect('/biblioteca/public/livro.php?id=' . $obra_id);
+redirect(url('livro.php') . '?id=' . $obra_id);

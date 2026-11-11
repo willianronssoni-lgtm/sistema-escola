@@ -22,7 +22,9 @@ function login(string $matricula, string $senha): array {
     }
     
     // Regenerar ID da sessão para segurança
-    session_regenerate_id(true);
+    if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+        session_regenerate_id(true);
+    }
     
     $_SESSION['usuario'] = [
         'id' => $usuario['id'],
@@ -170,7 +172,7 @@ function atualizar_usuario(int $id, array $dados): array {
         $params[] = $dados['nome'];
     }
     
-    if (isset($dados['email'])) {
+    if (array_key_exists('email', $dados)) {
         if ($dados['email'] !== $usuario['email']) {
             $stmt = $db->prepare("SELECT id FROM usuarios WHERE email = ? AND id != ?");
             $stmt->execute([$dados['email'], $id]);
@@ -182,17 +184,18 @@ function atualizar_usuario(int $id, array $dados): array {
         $params[] = $dados['email'] ?: null;
     }
     
-    if (isset($dados['turma'])) {
+    if (array_key_exists('turma', $dados)) {
         $campos[] = 'turma = ?';
         $params[] = $dados['turma'] ?: null;
     }
     
-    if (isset($dados['ativo'])) {
+    if (array_key_exists('ativo', $dados)) {
         $campos[] = 'ativo = ?';
         $params[] = (int)$dados['ativo'];
     }
     
-    if (isset($dados['suspenso_ate'])) {
+    // array_key_exists permite remover uma suspensão enviando null.
+    if (array_key_exists('suspenso_ate', $dados)) {
         $campos[] = 'suspenso_ate = ?';
         $params[] = $dados['suspenso_ate'] ?: null;
     }

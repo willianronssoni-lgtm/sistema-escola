@@ -3,18 +3,18 @@ require_once __DIR__ . '/../app/config/config.php';
 require_aluno();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('/biblioteca/public/minhas-reservas.php');
+    redirect(url('minhas-reservas.php'));
 }
 
 if (!csfr_verify($_POST['csrf_token'] ?? '')) {
     flash('erro', 'Token inválido');
-    redirect('/biblioteca/public/minhas-reservas.php');
+    redirect(url('minhas-reservas.php'));
 }
 
 $reserva_id = (int)($_POST['reserva_id'] ?? 0);
 if (!$reserva_id) {
     flash('erro', 'Reserva inválida');
-    redirect('/biblioteca/public/minhas-reservas.php');
+    redirect(url('minhas-reservas.php'));
 }
 
 $db = db();
@@ -46,12 +46,12 @@ try {
             // Confirmar para o próximo da fila
             $exemplar = buscar_exemplar_disponivel($reserva['obra_id']);
             if ($exemplar) {
-                $data_expiracao = date('Y-m-d H:i:s', strtotime('+48 hours'));
+                $data_expiracao = date('Y-m-d H:i:s', strtotime('+' . PRAZO_RESERVA_HORAS . ' hours'));
                 $stmt = $db->prepare("
                     UPDATE reservas SET status = 'confirmada', exemplar_id = ?, data_confirmacao = NOW(), data_expiracao = ?
                     WHERE id = ?
                 ");
-                $stmt->execute([$exemplar['id'], $data_expiracao, $proximo['reserva_id']]);
+                $stmt->execute([$exemplar['id'], $data_expiracao, $proximo['id']]);
                 
                 $stmt = $db->prepare("UPDATE exemplares SET status = 'reservado' WHERE id = ?");
                 $stmt->execute([$exemplar['id']]);
@@ -59,7 +59,7 @@ try {
                 criar_notificacao($proximo['usuario_id'], 'reserva_confirmada',
                     'Reserva confirmada (fila): ' . $proximo['obra_titulo'],
                     'Sua reserva na fila foi confirmada! Retire o exemplar (Tombo: ' . $exemplar['tombo'] . ') até ' . format_datetime($data_expiracao) . '.',
-                    '/biblioteca/public/minhas-reservas.php'
+                    url('minhas-reservas.php')
                 );
             }
         }
@@ -79,4 +79,4 @@ try {
     flash('erro', $e->getMessage());
 }
 
-redirect('/biblioteca/public/minhas-reservas.php');
+redirect(url('minhas-reservas.php'));

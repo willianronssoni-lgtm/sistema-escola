@@ -9,7 +9,7 @@ $db = db();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csfr_verify($_POST['csrf_token'] ?? '')) {
         flash('erro', 'Sessão expirada. Atualize a página e tente novamente.');
-        redirect('/biblioteca/public/painel.php');
+        redirect(url('painel.php'));
     }
 
     $acao = $_POST['acao'] ?? '';
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$exemplarId]);
             $db->commit();
             registrar_log('emprestimo_criado', 'emprestimos', (int)$db->lastInsertId(), ['usuario_id' => $alunoId, 'exemplar_id' => $exemplarId]);
-            criar_notificacao($alunoId, 'devolucao_proxima', 'Empréstimo registrado', 'A devolução está prevista para ' . format_date($prevista) . '.', '/biblioteca/public/meus-emprestimos.php');
+            criar_notificacao($alunoId, 'devolucao_proxima', 'Empréstimo registrado', 'A devolução está prevista para ' . format_date($prevista) . '.', url('meus-emprestimos.php'));
             flash('sucesso', 'Empréstimo registrado. Devolução prevista para ' . format_date($prevista) . '.');
         } elseif ($acao === 'devolucao') {
             $emprestimoId = (int)($_POST['emprestimo_id'] ?? 0);
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$emp['exemplar_id'], $expira, $fila['id']]);
                 $stmt = $db->prepare("UPDATE exemplares SET status = 'reservado' WHERE id = ?");
                 $stmt->execute([$emp['exemplar_id']]);
-                criar_notificacao((int)$fila['usuario_id'], 'livro_disponivel', 'Livro disponível para retirada', 'Sua vez chegou. Retire o exemplar até ' . format_datetime($expira) . '.', '/biblioteca/public/minhas-reservas.php');
+                criar_notificacao((int)$fila['usuario_id'], 'livro_disponivel', 'Livro disponível para retirada', 'Sua vez chegou. Retire o exemplar até ' . format_datetime($expira) . '.', url('minhas-reservas.php'));
             }
             if ($atraso > 0) {
                 $suspensaoAte = date('Y-m-d', strtotime('+' . $atraso . ' days'));
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         error_log('Painel da biblioteca: ' . $e->getMessage());
         flash('erro', $e instanceof PDOException ? 'Não foi possível concluir. Verifique os dados e se a matrícula/tombo já existem.' : $e->getMessage());
     }
-    redirect('/biblioteca/public/painel.php');
+    redirect(url('painel.php'));
 }
 
 $stats = [
