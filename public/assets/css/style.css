@@ -1,0 +1,80 @@
+/* Biblioteca Escolar - estilos próprios (complementam o Bootstrap 5) */
+
+:root {
+    --be-primary: #0d6efd;
+    --be-bg: #f5f7fb;
+}
+
+body {
+    background-color: var(--be-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Cartões de ação da página inicial */
+.action-card {
+    transition: transform .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .12) !important;
+}
+
+/* Tabelas */
+.table th {
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Capa do livro */
+.book-cover {
+    width: 100%;
+    max-width: 180px;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: .5rem;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .15);
+}
+
+/* Filtros do catálogo */
+.filter-bar {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: .75rem;
+    padding: 1rem;
+}
+
+/* Estado vazio das listas */
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: #6c757d;
+}
+
+/* Badges de status com fonte um pouco menor */
+.badge {
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+/* Impressão de relatórios */
+@media print {
+    .navbar,
+    footer,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+    }
+}

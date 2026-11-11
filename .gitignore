@@ -1,0 +1,13 @@
+# Arquivos locais e artefatos de execução
+.env
+.idea/
+.vscode/
+*.log
+
+# Capas enviadas por usuarios
+uploads/capas/*
+!uploads/capas/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
