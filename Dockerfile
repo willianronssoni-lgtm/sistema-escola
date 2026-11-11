@@ -7,9 +7,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Railway fornece PORT=8080 por padrão para este serviço.
+# O AllowOverride All habilita o .htaccess, que reescreve /api/v1/...
+# para o front controller da API REST.
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
     && sed -i 's/:80>/:8080>/' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' /etc/apache2/sites-available/000-default.conf
+    && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's#<Directory /var/www/html>#<Directory /var/www/html/public>#' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's#AllowOverride None#AllowOverride All#' /etc/apache2/apache2.conf
 
 COPY . /var/www/html/
 RUN mkdir -p /var/www/html/uploads/capas \
