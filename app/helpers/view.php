@@ -11,6 +11,7 @@ function view(string $arquivo, array $dados = []): void {
     ob_start();
     require VIEWS_PATH . "/{$arquivo}.php";
     $content = ob_get_clean();
+    $scripts = '';
     
     require VIEWS_PATH . '/layout.php';
 }
