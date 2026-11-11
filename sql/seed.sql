@@ -1,7 +1,9 @@
 -- Dados de exemplo para a Biblioteca Escolar
 -- Execute após o schema.sql: source /caminho/para/seed.sql
 
-USE `biblioteca_escolar`;
+-- Selecione o banco antes de executar este arquivo:
+--   mysql -u USUARIO -p NOME_DO_BANCO < sql/seed.sql
+-- (o script usa apenas o banco selecionado, sem hardcode de nome)
 
 -- Limpar dados existentes (manter estrutura)
 SET FOREIGN_KEY_CHECKS = 0;
@@ -15,26 +17,26 @@ TRUNCATE TABLE `usuarios`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Senha padrão para todos: "123456" (hash gerado com password_hash)
--- $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi = "123456"
+-- $2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6 = "123456"
 
 -- 1. Usuários: 1 bibliotecário + 15 alunos
 INSERT INTO `usuarios` (`matricula`, `nome`, `email`, `turma`, `senha_hash`, `tipo`, `ativo`) VALUES
-('BIB001', 'Maria Silva Santos', 'maria.bibliotecaria@escola.br', NULL, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'bibliotecario', 1),
-('2024001', 'João Pedro Alves', 'joao.alves@aluno.escola.br', '6º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024002', 'Ana Clara Ferreira', 'ana.ferreira@aluno.escola.br', '6º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024003', 'Lucas Gabriel Souza', 'lucas.souza@aluno.escola.br', '6º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024004', 'Beatriz Oliveira Costa', 'beatriz.costa@aluno.escola.br', '6º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024005', 'Rafael Henrique Lima', 'rafael.lima@aluno.escola.br', '7º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024006', 'Mariana Santos Rocha', 'mariana.rocha@aluno.escola.br', '7º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024007', 'Gustavo Dias Martins', 'gustavo.martins@aluno.escola.br', '7º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024008', 'Isabela Cardoso Pereira', 'isabela.pereira@aluno.escola.br', '7º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024009', 'Pedro Henrique Ribeiro', 'pedro.ribeiro@aluno.escola.br', '8º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024010', 'Laura Mendes Carvalho', 'laura.carvalho@aluno.escola.br', '8º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024011', 'Enzo Gabriel Nunes', 'enzo.nunes@aluno.escola.br', '8º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024012', 'Sophia Alves Monteiro', 'sophia.monteiro@aluno.escola.br', '8º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024013', 'Arthur Souza Barbosa', 'arthur.barbosa@aluno.escola.br', '9º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024014', 'Valentina Lima Correia', 'valentina.correia@aluno.escola.br', '9º A', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1),
-('2024015', 'Matheus Rodrigues Azevedo', 'matheus.azevedo@aluno.escola.br', '9º B', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'aluno', 1);
+('BIB001', 'Maria Silva Santos', 'maria.bibliotecaria@escola.br', NULL, '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'bibliotecario', 1),
+('2024001', 'João Pedro Alves', 'joao.alves@aluno.escola.br', '6º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024002', 'Ana Clara Ferreira', 'ana.ferreira@aluno.escola.br', '6º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024003', 'Lucas Gabriel Souza', 'lucas.souza@aluno.escola.br', '6º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024004', 'Beatriz Oliveira Costa', 'beatriz.costa@aluno.escola.br', '6º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024005', 'Rafael Henrique Lima', 'rafael.lima@aluno.escola.br', '7º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024006', 'Mariana Santos Rocha', 'mariana.rocha@aluno.escola.br', '7º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024007', 'Gustavo Dias Martins', 'gustavo.martins@aluno.escola.br', '7º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024008', 'Isabela Cardoso Pereira', 'isabela.pereira@aluno.escola.br', '7º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024009', 'Pedro Henrique Ribeiro', 'pedro.ribeiro@aluno.escola.br', '8º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024010', 'Laura Mendes Carvalho', 'laura.carvalho@aluno.escola.br', '8º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024011', 'Enzo Gabriel Nunes', 'enzo.nunes@aluno.escola.br', '8º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024012', 'Sophia Alves Monteiro', 'sophia.monteiro@aluno.escola.br', '8º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024013', 'Arthur Souza Barbosa', 'arthur.barbosa@aluno.escola.br', '9º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024014', 'Valentina Lima Correia', 'valentina.correia@aluno.escola.br', '9º A', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1),
+('2024015', 'Matheus Rodrigues Azevedo', 'matheus.azevedo@aluno.escola.br', '9º B', '$2y$10$l3NI8I5mxMXFusMNLrpp3..YBQmuzo5HfgwAq3N0RH0AjJCP./gR6', 'aluno', 1);
 
 -- 2. Obras: 25 livros variados
 INSERT INTO `obras` (`titulo`, `autor`, `isbn`, `editora`, `ano`, `categoria`, `sinopse`, `capa`) VALUES
