@@ -16,62 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reservaId = (int)($_POST['reserva_id'] ?? 0);
 
     try {
-        $stmt = $db->prepare("SELECT * FROM reservas WHERE id = ?");
-        $stmt->execute([$reservaId]);
-        $reserva = $stmt->fetch();
-        if (!$reserva) {
-            throw new RuntimeException('Reserva não encontrada.');
-        }
-
         if ($acao === 'cancelar') {
-            if (!in_array($reserva['status'], ['pendente', 'confirmada', 'na_fila'], true)) {
-                throw new RuntimeException('Esta reserva não pode mais ser cancelada.');
-            }
-
-            $db->beginTransaction();
-
-            if ($reserva['status'] === 'confirmada' && $reserva['exemplar_id']) {
-                $stmt = $db->prepare("UPDATE exemplares SET status = 'disponivel' WHERE id = ?");
-                $stmt->execute([(int)$reserva['exemplar_id']]);
-            }
-
-            $stmt = $db->prepare("UPDATE reservas SET status = 'cancelada' WHERE id = ?");
-            $stmt->execute([$reservaId]);
-
-            $db->commit();
-            registrar_log('reserva_cancelada_bibliotecario', 'reservas', $reservaId);
+            $resultado = servico_cancelar_reserva($reservaId, (int)usuario_id(), true);
             flash('sucesso', 'Reserva cancelada.');
         } elseif ($acao === 'confirmar') {
-            if ($reserva['status'] !== 'na_fila') {
-                throw new RuntimeException('Somente reservas na fila podem ser confirmadas.');
+            $resultado = servico_confirmar_reserva($reservaId);
+
+            if (!$resultado['sucesso']) {
+                throw new RuntimeException($resultado['erro']);
             }
 
-            $exemplar = buscar_exemplar_disponivel((int)$reserva['obra_id']);
-            if (!$exemplar) {
-                throw new RuntimeException('Não há exemplar disponível desta obra no momento.');
-            }
-
-            $db->beginTransaction();
-
-            $expira = date('Y-m-d H:i:s', strtotime('+' . PRAZO_RESERVA_HORAS . ' hours'));
-            $stmt = $db->prepare("
-                UPDATE reservas
-                SET status = 'confirmada', exemplar_id = ?, data_confirmacao = NOW(), data_expiracao = ?, posicao_fila = NULL
-                WHERE id = ?
-            ");
-            $stmt->execute([(int)$exemplar['id'], $expira, $reservaId]);
-
-            $stmt = $db->prepare("UPDATE exemplares SET status = 'reservado' WHERE id = ?");
-            $stmt->execute([(int)$exemplar['id']]);
-
-            $db->commit();
-
-            criar_notificacao((int)$reserva['usuario_id'], 'reserva_confirmada', 'Reserva confirmada',
-                'Sua reserva foi confirmada. Retire o exemplar (Tombo: ' . $exemplar['tombo'] . ') até ' . format_datetime($expira) . '.',
-                url('minhas-reservas.php'));
-
-            registrar_log('reserva_confirmada_bibliotecario', 'reservas', $reservaId);
-            flash('sucesso', 'Reserva confirmada para ' . format_date($expira, 'd/m/Y H:i') . '.');
+            flash('sucesso', 'Reserva confirmada. Retirada até ' . format_datetime($resultado['expiracao']) . '.');
         } else {
             throw new InvalidArgumentException('Operação não reconhecida.');
         }

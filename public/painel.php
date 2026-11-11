@@ -46,61 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             registrar_log('cadastro_obra', 'obras', $obraId, ['titulo' => $titulo, 'tombo' => $tombo]);
             flash('sucesso', 'Livro e exemplar adicionados ao acervo.');
         } elseif ($acao === 'emprestimo') {
-            $alunoId = (int)($_POST['aluno_id'] ?? 0);
-            $exemplarId = (int)($_POST['exemplar_id'] ?? 0);
-            $db->beginTransaction();
-            $stmt = $db->prepare("SELECT id FROM usuarios WHERE id = ? AND tipo = 'aluno' AND ativo = 1 FOR UPDATE");
-            $stmt->execute([$alunoId]);
-            if (!$stmt->fetch()) throw new RuntimeException('Aluno não encontrado ou inativo.');
-            $permissao = usuario_pode_emprestar($alunoId);
-            if (!$permissao['pode']) throw new RuntimeException($permissao['motivo']);
-            $stmt = $db->prepare("SELECT id FROM exemplares WHERE id = ? AND status = 'disponivel' FOR UPDATE");
-            $stmt->execute([$exemplarId]);
-            if (!$stmt->fetch()) throw new RuntimeException('Exemplar indisponível. Atualize a página.');
-            $hoje = date('Y-m-d');
-            $prevista = date('Y-m-d', strtotime('+' . PRAZO_EMPRESTIMO_DIAS . ' days'));
-            $stmt = $db->prepare('INSERT INTO emprestimos (exemplar_id, usuario_id, bibliotecario_id, data_retirada, data_prevista_devolucao) VALUES (?, ?, ?, ?, ?)');
-            $stmt->execute([$exemplarId, $alunoId, usuario_id(), $hoje, $prevista]);
-            $stmt = $db->prepare("UPDATE exemplares SET status = 'emprestado' WHERE id = ?");
-            $stmt->execute([$exemplarId]);
-            $db->commit();
-            registrar_log('emprestimo_criado', 'emprestimos', (int)$db->lastInsertId(), ['usuario_id' => $alunoId, 'exemplar_id' => $exemplarId]);
-            criar_notificacao($alunoId, 'devolucao_proxima', 'Empréstimo registrado', 'A devolução está prevista para ' . format_date($prevista) . '.', url('meus-emprestimos.php'));
-            flash('sucesso', 'Empréstimo registrado. Devolução prevista para ' . format_date($prevista) . '.');
+            $resultado = servico_registrar_emprestimo(
+                (int)($_POST['aluno_id'] ?? 0),
+                (int)($_POST['exemplar_id'] ?? 0),
+                (int)usuario_id()
+            );
+            flash('sucesso', 'Empréstimo registrado. Devolução prevista para ' . format_date($resultado['data_prevista']) . '.');
         } elseif ($acao === 'devolucao') {
-            $emprestimoId = (int)($_POST['emprestimo_id'] ?? 0);
-            $db->beginTransaction();
-            $stmt = $db->prepare("SELECT emp.*, e.obra_id, e.id AS exemplar_id FROM emprestimos emp JOIN exemplares e ON e.id = emp.exemplar_id WHERE emp.id = ? AND emp.data_devolucao IS NULL FOR UPDATE");
-            $stmt->execute([$emprestimoId]);
-            $emp = $stmt->fetch();
-            if (!$emp) throw new RuntimeException('Empréstimo ativo não encontrado.');
-            $hoje = date('Y-m-d');
-            $atraso = max(0, (int)((strtotime($hoje) - strtotime($emp['data_prevista_devolucao'])) / 86400));
-            $stmt = $db->prepare('UPDATE emprestimos SET data_devolucao = ?, dias_atraso = ? WHERE id = ?');
-            $stmt->execute([$hoje, $atraso, $emprestimoId]);
-            $stmt = $db->prepare("UPDATE exemplares SET status = 'disponivel' WHERE id = ?");
-            $stmt->execute([$emp['exemplar_id']]);
-
-            // Se houver fila, o exemplar fica reservado para o próximo aluno.
-            $fila = proximo_da_fila((int)$emp['obra_id']);
-            if ($fila) {
-                $expira = date('Y-m-d H:i:s', strtotime('+' . PRAZO_RESERVA_HORAS . ' hours'));
-                $stmt = $db->prepare("UPDATE reservas SET status = 'confirmada', exemplar_id = ?, data_confirmacao = NOW(), data_expiracao = ?, posicao_fila = NULL WHERE id = ?");
-                $stmt->execute([$emp['exemplar_id'], $expira, $fila['id']]);
-                $stmt = $db->prepare("UPDATE exemplares SET status = 'reservado' WHERE id = ?");
-                $stmt->execute([$emp['exemplar_id']]);
-                criar_notificacao((int)$fila['usuario_id'], 'livro_disponivel', 'Livro disponível para retirada', 'Sua vez chegou. Retire o exemplar até ' . format_datetime($expira) . '.', url('minhas-reservas.php'));
-            }
-            if ($atraso > 0) {
-                $suspensaoAte = date('Y-m-d', strtotime('+' . $atraso . ' days'));
-                $stmt = $db->prepare('UPDATE usuarios SET suspenso_ate = ? WHERE id = ?');
-                $stmt->execute([$suspensaoAte, $emp['usuario_id']]);
-                $stmt = $db->prepare('UPDATE emprestimos SET suspensao_aplicada = 1 WHERE id = ?');
-                $stmt->execute([$emprestimoId]);
-            }
-            $db->commit();
-            registrar_log('emprestimo_devolvido', 'emprestimos', $emprestimoId, ['dias_atraso' => $atraso]);
-            flash('sucesso', $atraso > 0 ? "Devolução registrada com {$atraso} dia(s) de atraso." : 'Devolução registrada com sucesso.');
+            $resultado = servico_registrar_devolucao((int)($_POST['emprestimo_id'] ?? 0));
+            flash('sucesso', $resultado['dias_atraso'] > 0
+                ? "Devolução registrada com {$resultado['dias_atraso']} dia(s) de atraso."
+                : 'Devolução registrada com sucesso.');
         } else {
             throw new InvalidArgumentException('Operação não reconhecida.');
         }

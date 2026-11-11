@@ -16,82 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($acao === 'registrar') {
-            $alunoId = (int)($_POST['aluno_id'] ?? 0);
-            $exemplarId = (int)($_POST['exemplar_id'] ?? 0);
+            $resultado = servico_registrar_emprestimo(
+                (int)($_POST['aluno_id'] ?? 0),
+                (int)($_POST['exemplar_id'] ?? 0),
+                (int)usuario_id()
+            );
 
-            $db->beginTransaction();
-
-            $stmt = $db->prepare("SELECT id, nome FROM usuarios WHERE id = ? AND tipo = 'aluno' AND ativo = 1 FOR UPDATE");
-            $stmt->execute([$alunoId]);
-            $aluno = $stmt->fetch();
-            if (!$aluno) {
-                throw new RuntimeException('Aluno não encontrado ou inativo.');
-            }
-
-            $permissao = usuario_pode_emprestar($alunoId);
-            if (!$permissao['pode']) {
-                throw new RuntimeException($permissao['motivo']);
-            }
-
-            $stmt = $db->prepare("SELECT id, tombo, obra_id FROM exemplares WHERE id = ? AND status = 'disponivel' FOR UPDATE");
-            $stmt->execute([$exemplarId]);
-            $exemplar = $stmt->fetch();
-            if (!$exemplar) {
-                throw new RuntimeException('Exemplar indisponível. Atualize a página.');
-            }
-
-            $hoje = date('Y-m-d');
-            $prevista = date('Y-m-d', strtotime('+' . PRAZO_EMPRESTIMO_DIAS . ' days'));
-
-            $stmt = $db->prepare("
-                INSERT INTO emprestimos (exemplar_id, usuario_id, bibliotecario_id, data_retirada, data_prevista_devolucao)
-                VALUES (?, ?, ?, ?, ?)
-            ");
-            $stmt->execute([$exemplarId, $alunoId, usuario_id(), $hoje, $prevista]);
-            $emprestimoId = (int)$db->lastInsertId();
-
-            $stmt = $db->prepare("UPDATE exemplares SET status = 'emprestado' WHERE id = ?");
-            $stmt->execute([$exemplarId]);
-
-            $db->commit();
-
-            registrar_log('emprestimo_criado', 'emprestimos', $emprestimoId, [
-                'usuario_id' => $alunoId,
-                'exemplar_id' => $exemplarId,
-            ]);
-
-            criar_notificacao($alunoId, 'devolucao_proxima', 'Empréstimo registrado',
-                'A devolução está prevista para ' . format_date($prevista) . '.',
-                url('meus-emprestimos.php'));
-
-            flash('sucesso', 'Empréstimo registrado para ' . $aluno['nome'] . '. Devolução prevista para ' . format_date($prevista) . '.');
+            flash('sucesso', 'Empréstimo registrado. Devolução prevista para ' . format_date($resultado['data_prevista']) . '.');
         } elseif ($acao === 'renovar') {
-            $emprestimoId = (int)($_POST['emprestimo_id'] ?? 0);
+            $resultado = servico_renovar_emprestimo((int)($_POST['emprestimo_id'] ?? 0), (int)usuario_id(), true);
 
-            $stmt = $db->prepare("SELECT * FROM emprestimos WHERE id = ? AND data_devolucao IS NULL");
-            $stmt->execute([$emprestimoId]);
-            $emprestimo = $stmt->fetch();
-            if (!$emprestimo) {
-                throw new RuntimeException('Empréstimo ativo não encontrado.');
-            }
-            if ((int)$emprestimo['renovado'] >= MAX_RENOVACOES) {
-                throw new RuntimeException('Limite de renovações atingido para este empréstimo.');
+            if (!$resultado['sucesso']) {
+                throw new RuntimeException($resultado['erro']);
             }
 
-            $nova = date('Y-m-d', strtotime($emprestimo['data_prevista_devolucao'] . ' +' . PRAZO_RENOVACAO_DIAS . ' days'));
-            if ($nova < date('Y-m-d')) {
-                $nova = date('Y-m-d', strtotime('+' . PRAZO_RENOVACAO_DIAS . ' days'));
-            }
-
-            $stmt = $db->prepare("UPDATE emprestimos SET data_prevista_devolucao = ?, renovado = 1 WHERE id = ?");
-            $stmt->execute([$nova, $emprestimoId]);
-
-            registrar_log('emprestimo_renovado_bibliotecario', 'emprestimos', $emprestimoId);
-            criar_notificacao((int)$emprestimo['usuario_id'], 'renovacao', 'Empréstimo renovado',
-                'Seu empréstimo foi renovado. Nova devolução prevista para ' . format_date($nova) . '.',
-                url('meus-emprestimos.php'));
-
-            flash('sucesso', 'Empréstimo renovado até ' . format_date($nova) . '.');
+            flash('sucesso', 'Empréstimo renovado até ' . format_date($resultado['data_prevista']) . '.');
         } else {
             throw new InvalidArgumentException('Operação não reconhecida.');
         }
