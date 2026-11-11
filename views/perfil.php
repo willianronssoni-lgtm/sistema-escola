@@ -1,3 +1,5 @@
+<?= partial('breadcrumb', ['itens' => [['titulo' => 'Início', 'url' => url('index.php')], ['titulo' => 'Meu perfil']]]) ?>
+
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
   <div>
     <h1 class="h3 mb-1">Meu perfil</h1>

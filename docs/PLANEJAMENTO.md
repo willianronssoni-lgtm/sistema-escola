@@ -14,7 +14,7 @@ Desenvolver um sistema web para organizar a biblioteca escolar. A aplicação de
 3. Consulta os detalhes do livro e a disponibilidade dos exemplares.
 4. Solicita uma reserva quando houver exemplar disponível.
 5. Entra na fila de espera quando não houver disponibilidade.
-6. Acompanha suas reservas e empréstimos, incluindo a data prevista de devolução.
+6. Acompanha suas reservas, sua posição na fila e seus empréstimos, incluindo a data prevista de devolução.
 7. Cancela uma reserva quando ela ainda permitir cancelamento.
 
 ### Perfil do bibliotecário
@@ -51,7 +51,8 @@ Os valores acima estão definidos na configuração atual e poderão ser ajustad
 | CSS3 | Aparência e adaptação a diferentes telas |
 | JavaScript | Interações da interface |
 | Git e GitHub | Versionamento, colaboração e histórico do projeto |
-| GitHub Actions | Execução automática de verificações e testes (etapa planejada) |
+| GitHub Actions | Execução automática de verificações e testes |
+| API REST | Integração JSON versionada, com autenticação por token |
 
 A aplicação utiliza PHP e MySQL diretamente; não depende de um framework PHP para funcionar.
 
@@ -60,7 +61,10 @@ A aplicação utiliza PHP e MySQL diretamente; não depende de um framework PHP 
 - `app/auth/`: autenticação e controle de acesso.
 - `app/config/`: configurações gerais e conexão com o banco.
 - `app/helpers/`: funções auxiliares e renderização de páginas.
+- `app/services/`: regras de negócio de empréstimo, devolução, reserva e fila.
+- `app/api/`: autenticação por token, respostas JSON e roteador da API REST.
 - `public/`: ponto de entrada e páginas acessíveis pelo navegador.
+- `public/api/index.php`: ponto de entrada da API REST.
 - `public/assets/`: folha de estilo e script da interface.
 - `views/`: modelos visuais das páginas.
 - `sql/schema.sql`: criação da estrutura do banco de dados.
@@ -98,6 +102,9 @@ Também existem visões SQL para consultar disponibilidade, empréstimos ativos 
 - [x] Fluxos iniciais de reserva e fila de espera.
 - [x] Renovação de empréstimo com validação de prazo, atraso e fila.
 - [x] Notificações, perfil e alteração de senha.
+- [x] Página da fila de espera com a posição de cada obra.
+- [x] Navegação completa: menu por perfil, atalhos na página inicial, trilha de navegação e rodapé.
+- [x] Verificação automática de links internos (`tests/links.php`).
 - [ ] Validar todos os cenários de uso com dados de teste.
 
 ### Etapa 3 — Administração da biblioteca
@@ -110,6 +117,8 @@ Também existem visões SQL para consultar disponibilidade, empréstimos ativos 
 
 ### Etapa 4 — Qualidade e segurança
 - [x] Testes automatizados das regras de negócio (testes de integração com MySQL).
+- [x] API REST versionada com autenticação por token e testes próprios.
+- [x] Regras de negócio centralizadas em `app/services/`, compartilhadas pela web e pela API.
 - [x] Testes dos fluxos principais de aluno e bibliotecário.
 - [x] Revisão de permissões e proteção das rotas.
 - [x] Validação de formulários e tratamento de erros.

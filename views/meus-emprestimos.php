@@ -1,3 +1,5 @@
+<?= partial('breadcrumb', ['itens' => [['titulo' => 'Início', 'url' => url('index.php')], ['titulo' => 'Meus empréstimos']]]) ?>
+
 <?php
 $titulo = $titulo ?? 'Meus Empréstimos';
 $ativos = $ativos ?? [];
@@ -44,7 +46,7 @@ $suspenso_ate = $suspenso_ate ?? null;
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <?php if ($emp['capa']): ?>
-                                            <img src="/biblioteca/uploads/capas/<?= e($emp['capa']) ?>" alt="" class="book-cover-xs me-2">
+                                            <img src="<?= e(capa_url($emp['capa'])) ?>" alt="" class="book-cover-xs me-2">
                                         <?php else: ?>
                                             <div class="book-cover-xs bg-light d-flex align-items-center justify-content-center me-2">
                                                 <i class="bi bi-book text-muted"></i>

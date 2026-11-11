@@ -1,3 +1,5 @@
+<?= partial('breadcrumb', ['itens' => [['titulo' => 'Início', 'url' => url('index.php')], ['titulo' => 'Biblioteca', 'url' => url('painel.php')], ['titulo' => 'Reservas e fila']]]) ?>
+
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
   <div>
     <h1 class="h3 mb-1">Reservas</h1>

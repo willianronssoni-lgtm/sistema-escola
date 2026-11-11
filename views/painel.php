@@ -1,3 +1,5 @@
+<?= partial('breadcrumb', ['itens' => [['titulo' => 'Início', 'url' => url('index.php')], ['titulo' => 'Biblioteca']]]) ?>
+
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
   <div><h1 class="h3 mb-1">Painel do bibliotecário</h1><p class="text-muted mb-0">Visão geral e operações da biblioteca escolar.</p></div>
   <span class="badge text-bg-success">Área administrativa</span>

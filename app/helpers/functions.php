@@ -45,6 +45,16 @@ function url(string $caminho = ''): string {
     return $base . '/' . ltrim($caminho, '/');
 }
 
+/**
+ * URL pública da capa de um livro.
+ */
+function capa_url(?string $arquivo): string {
+    if (!$arquivo) {
+        return '';
+    }
+    return url('capa.php') . '?arquivo=' . rawurlencode($arquivo);
+}
+
 // ============================================================
 // AUTENTICAÇÃO E AUTORIZAÇÃO
 // ============================================================

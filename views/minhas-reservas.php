@@ -1,3 +1,5 @@
+<?= partial('breadcrumb', ['itens' => [['titulo' => 'Início', 'url' => url('index.php')], ['titulo' => 'Minhas reservas']]]) ?>
+
 <?php
 $titulo = $titulo ?? 'Minhas Reservas';
 $reservas = $reservas ?? [];
@@ -5,9 +7,14 @@ $reservas = $reservas ?? [];
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><i class="bi bi-bookmark-check me-2"></i>Minhas Reservas</h1>
+    <div class="d-flex gap-2">
+    <a href="<?= url('minha-fila.php') ?>" class="btn btn-outline-secondary">
+        <i class="bi bi-people me-1"></i>Minha fila
+    </a>
     <a href="<?= url('catalogo.php') ?>" class="btn btn-outline-primary">
         <i class="bi bi-plus me-1"></i>Buscar mais livros
     </a>
+  </div>
 </div>
 
 <?php if (empty($reservas)): ?>
@@ -26,7 +33,7 @@ $reservas = $reservas ?? [];
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <?php if ($r['capa']): ?>
-                                    <img src="/biblioteca/uploads/capas/<?= e($r['capa']) ?>" alt="" class="book-cover-sm">
+                                    <img src="<?= e(capa_url($r['capa'])) ?>" alt="" class="book-cover-sm">
                                 <?php else: ?>
                                     <div class="book-cover-sm d-flex align-items-center justify-content-center bg-light">
                                         <i class="bi bi-book fs-3 text-muted"></i>

@@ -30,6 +30,9 @@
                             <a class="nav-link" href="<?= url('minhas-reservas.php') ?>"><i class="bi bi-bookmark-check me-1"></i>Minhas Reservas</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="<?= url('minha-fila.php') ?>"><i class="bi bi-people me-1"></i>Minha Fila</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="<?= url('meus-emprestimos.php') ?>"><i class="bi bi-journal-bookmark me-1"></i>Meus Empréstimos</a>
                         </li>
                         <li class="nav-item">
@@ -42,19 +45,21 @@
                             </a>
                         </li>
                     <?php endif; ?>
-                    
+
                     <?php if (is_bibliotecario()): ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-gear me-1"></i>Painel
+                                <i class="bi bi-gear me-1"></i>Biblioteca
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="<?= url('painel.php') ?>"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="<?= url('acervo.php') ?>"><i class="bi bi-bookshelf me-2"></i>Acervo</a></li>
                                 <li><a class="dropdown-item" href="<?= url('alunos.php') ?>"><i class="bi bi-people me-2"></i>Alunos</a></li>
-                                <li><a class="dropdown-item" href="<?= url('reservas.php') ?>"><i class="bi bi-clock-history me-2"></i>Reservas</a></li>
                                 <li><a class="dropdown-item" href="<?= url('emprestimos.php') ?>"><i class="bi bi-journal-plus me-2"></i>Empréstimos</a></li>
                                 <li><a class="dropdown-item" href="<?= url('devolucoes.php') ?>"><i class="bi bi-arrow-return-left me-2"></i>Devoluções</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="<?= url('reservas.php') ?>"><i class="bi bi-clock-history me-2"></i>Reservas e fila</a></li>
                                 <li><a class="dropdown-item" href="<?= url('relatorios.php') ?>"><i class="bi bi-graph-up me-2"></i>Relatórios</a></li>
                             </ul>
                         </li>
@@ -72,6 +77,9 @@
                                 <li><h6 class="dropdown-header"><?= e(usuario_logado()['matricula']) ?></h6></li>
                                 <li><span class="dropdown-item-text text-muted"><?= usuario_tipo() === 'aluno' ? 'Aluno' : 'Bibliotecário' ?></span></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <?php if (is_bibliotecario()): ?>
+                                    <li><a class="dropdown-item" href="<?= url('painel.php') ?>"><i class="bi bi-speedometer2 me-2"></i>Painel da biblioteca</a></li>
+                                <?php endif; ?>
                                 <li><a class="dropdown-item" href="<?= url('perfil.php') ?>"><i class="bi bi-person me-2"></i>Meu Perfil</a></li>
                                 <li><a class="dropdown-item" href="<?= url('alterar-senha.php') ?>"><i class="bi bi-key me-2"></i>Alterar Senha</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -98,9 +106,47 @@
         <?= $content ?>
     </main>
 
-    <footer class="bg-light border-top py-3 mt-auto">
-        <div class="container text-center text-muted small">
-            <?= APP_NAME ?> v<?= APP_VERSION ?> &copy; <?= date('Y') ?>
+    <footer class="bg-light border-top py-4 mt-auto">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2"><i class="bi bi-book-fill me-1"></i><?= APP_NAME ?></div>
+                    <p class="text-muted small mb-0">Organização da biblioteca escolar: catálogo, reservas, fila de espera e empréstimos.</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2">Aluno</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a class="link-secondary" href="<?= url('catalogo.php') ?>">Catálogo</a></li>
+                        <li><a class="link-secondary" href="<?= url('minhas-reservas.php') ?>">Minhas reservas</a></li>
+                        <li><a class="link-secondary" href="<?= url('minha-fila.php') ?>">Minha fila de espera</a></li>
+                        <li><a class="link-secondary" href="<?= url('meus-emprestimos.php') ?>">Meus empréstimos</a></li>
+                        <li><a class="link-secondary" href="<?= url('notificacoes.php') ?>">Notificações</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2">Bibliotecário</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a class="link-secondary" href="<?= url('painel.php') ?>">Painel</a></li>
+                        <li><a class="link-secondary" href="<?= url('acervo.php') ?>">Acervo</a></li>
+                        <li><a class="link-secondary" href="<?= url('alunos.php') ?>">Alunos</a></li>
+                        <li><a class="link-secondary" href="<?= url('emprestimos.php') ?>">Empréstimos</a></li>
+                        <li><a class="link-secondary" href="<?= url('devolucoes.php') ?>">Devoluções</a></li>
+                        <li><a class="link-secondary" href="<?= url('reservas.php') ?>">Reservas e fila</a></li>
+                        <li><a class="link-secondary" href="<?= url('relatorios.php') ?>">Relatórios</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="fw-semibold mb-2">Conta</div>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a class="link-secondary" href="<?= url('perfil.php') ?>">Meu perfil</a></li>
+                        <li><a class="link-secondary" href="<?= url('alterar-senha.php') ?>">Alterar senha</a></li>
+                        <li><a class="link-secondary" href="<?= url('login.php') ?>">Entrar</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-muted small mt-3 pt-3 border-top">
+                <?= APP_NAME ?> v<?= APP_VERSION ?> &copy; <?= date('Y') ?>
+            </div>
         </div>
     </footer>
 

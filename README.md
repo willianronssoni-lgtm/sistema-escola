@@ -60,7 +60,7 @@ Troque a senha imediatamente e nunca use os dados fictícios em produção.
 - Catálogo com busca por título, autor, ISBN e filtro por categoria e disponibilidade.
 - Página da obra com exemplares, situação e histórico de reserva.
 - Reserva de exemplar disponível, entrada na fila de espera e cancelamento.
-- Acompanhamento de reservas, fila, empréstimos, atrasos e notificações.
+- Acompanhamento de reservas, **fila de espera** (com a posição de cada obra), empréstimos, atrasos e notificações.
 - Renovação de empréstimo (15 dias, 1 renovação por empréstimo, bloqueada em atraso ou quando há fila).
 
 **Bibliotecário**
@@ -81,14 +81,40 @@ Troque a senha imediatamente e nunca use os dados fictícios em produção.
 | Empréstimos simultâneos por aluno | 3 |
 | Atraso | gera suspensão do aluno pelo número de dias de atraso |
 
+## API REST
+A aplicação expõe uma API JSON versionada em `public/api/index.php`, com
+autenticação por token de acesso. As rotas, os códigos de resposta e os
+exemplos estão em [docs/API.md](docs/API.md).
+
+```bash
+curl -X POST "http://127.0.0.1:8000/api/index.php?rota=v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"matricula":"BIB001","senha":"123456"}'
+```
+
+## Navegação
+A interface tem três níveis de navegação para não deixar nenhum fluxo sem destino:
+
+- **Menu superior**: catálogo, minhas reservas, minha fila, meus empréstimos e notificações
+  (aluno); biblioteca com painel, acervo, alunos, empréstimos, devoluções, reservas e
+  relatórios (bibliotecário); perfil e alteração de senha (ambos).
+- **Atalhos na página inicial**: cartões de ação diferentes para aluno, bibliotecário e visitante.
+- **Trilha de navegação (breadcrumb)** em todas as telas internas, com o caminho de volta ao início.
+- **Rodapé** com os links de todas as áreas.
+
+O teste `tests/links.php` confere se todos os links internos apontam para páginas existentes,
+impedindo que um item de menu leve a um erro 404.
+
 ## Testes
 ```bash
 php tests/run.php           # testes unitários, sem banco de dados
-php tests/integration.php   # testes de integração (exige MySQL/MariaDB)
+php tests/links.php         # verificação dos links internos (sem banco de dados)
+php tests/integration.php   # testes de integração das regras (exige MySQL/MariaDB)
+php tests/api.php           # testes da API REST (exige MySQL/MariaDB)
 ```
-O teste de integração usa as variáveis `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` e `DB_PASS`,
-cria dados próprios e os remove ao final. Se o banco não estiver disponível, ele é ignorado com aviso.
-O GitHub Actions executa os dois: unitários em cada push e integração com um serviço MySQL 8.
+Os testes que usam o banco leem as variáveis `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` e `DB_PASS`,
+criam dados próprios e os removem ao final. Se o banco não estiver disponível, eles são ignorados com aviso.
+O GitHub Actions executa os quatro: unitários, links e integração/API com um serviço MySQL 8.
 
 ## Segurança
 - Use usuário MySQL dedicado com privilégios mínimos, nunca `root` em produção.
@@ -99,7 +125,8 @@ O GitHub Actions executa os dois: unitários em cada push e integração com um 
 
 ## Planejamento do projeto
 
-Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) para entender:
+Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) e a documentação da API em
+[docs/API.md](docs/API.md) para entender:
 - como o sistema deverá funcionar para alunos e bibliotecários;
 - quais regras de empréstimo e reserva estão previstas;
 - quais tecnologias e estrutura serão utilizadas;

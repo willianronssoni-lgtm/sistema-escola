@@ -69,7 +69,7 @@ $categorias = $categorias ?? [];
                 <div class="card book-card h-100">
                     <div class="card-img-top book-cover">
                         <?php if ($obra['capa']): ?>
-                            <img src="/biblioteca/uploads/capas/<?= e($obra['capa']) ?>" alt="<?= e($obra['titulo']) ?>" class="img-fluid">
+                            <img src="<?= e(capa_url($obra['capa'])) ?>" alt="<?= e($obra['titulo']) ?>" class="img-fluid">
                         <?php else: ?>
                             <i class="bi bi-book fs-1 text-muted"></i>
                         <?php endif; ?>
