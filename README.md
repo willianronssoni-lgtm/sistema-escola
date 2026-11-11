@@ -1,19 +1,21 @@
 # Biblioteca Escolar
 
-Sistema web em PHP e MySQL para catálogo, reservas, fila de espera e acompanhamento de empréstimos.
+Sistema web em PHP e MySQL para catálogo, reservas, fila de espera, renovação de empréstimos e administração da biblioteca escolar.
 
 ## Requisitos
-- PHP 8 ou superior
+- PHP 8.1 ou superior
 - MySQL 8 / MariaDB compatível
 - Extensões PHP: PDO, pdo_mysql, fileinfo e mbstring
 
 ## Instalação
-1. Configure o servidor web para publicar a pasta `public/`.
+1. Configure o servidor web para publicar a pasta `public/` (ela é a raiz da aplicação).
 2. Crie a estrutura do banco:
 
    ```bash
    mysql -u root -p < sql/schema.sql
    ```
+
+   `schema.sql` recria o banco `biblioteca_escolar`. Em um banco já existente, use `sql/railway-schema.sql`, que é idempotente e não apaga nada.
 
 3. Opcionalmente, carregue dados fictícios para demonstração:
 
@@ -21,17 +23,21 @@ Sistema web em PHP e MySQL para catálogo, reservas, fila de espera e acompanham
    mysql -u root -p biblioteca_escolar < sql/seed.sql
    ```
 
-   **Atenção:** `schema.sql` recria o banco e `seed.sql` limpa tabelas antes de inserir exemplos. Não execute em banco com dados reais.
+   **Atenção:** `seed.sql` limpa as tabelas antes de inserir exemplos. Nunca o execute em um banco com dados reais.
 
 4. Configure variáveis de ambiente no servidor PHP:
    - `DB_HOST`: host MySQL (padrão `127.0.0.1`)
+   - `DB_PORT`: porta do MySQL (padrão `3306`)
    - `DB_NAME`: banco (padrão `biblioteca_escolar`)
    - `DB_USER`: usuário (padrão `root`)
    - `DB_PASS`: senha (padrão vazio)
-   - `APP_URL`: URL pública (padrão `http://localhost/biblioteca/public`)
+   - `APP_URL`: URL pública da aplicação, **sem barra final** (padrão `http://localhost/biblioteca/public`)
    - `APP_NAME`: nome da aplicação
    - `APP_TIMEZONE`: fuso horário (padrão `America/Sao_Paulo`)
    - `DEBUG`: use `0` em produção; `1` somente em desenvolvimento
+
+   Todos os links da interface são gerados a partir de `APP_URL`. Em produção, informe a URL raiz
+   (por exemplo `https://biblioteca.up.railway.app`) e o sistema funciona sem nenhum ajuste adicional.
 
 5. Garanta permissão de escrita em `uploads/capas`.
 6. Acesse a URL definida em `APP_URL`.
@@ -43,16 +49,53 @@ php -S 127.0.0.1:8000 -t public
 Ajuste `APP_URL=http://127.0.0.1:8000` nesse cenário.
 
 ## Conta de demonstração
-Depois de importar `sql/seed.sql`, use matrícula `BIB001` e senha `123456`. Troque a senha imediatamente e nunca use os dados fictícios em produção.
+Depois de importar `sql/seed.sql`, use matrícula `BIB001` e senha `123456` (bibliotecário).
+Os alunos de demonstração usam matrículas de `2024001` a `2024015` e a mesma senha.
+Troque a senha imediatamente e nunca use os dados fictícios em produção.
 
-## Situação atual
-A base possui autenticação, catálogo, reservas, fila e páginas do aluno. O painel inicial do bibliotecário está disponível em `public/painel.php`, com cadastro de alunos, inclusão de livros/exemplares, registro de empréstimos e devoluções. Há testes unitários básicos em `tests/run.php` e execução automatizada via GitHub Actions. A validação de integração com um banco MySQL real, a revisão de todos os fluxos e a conclusão dos módulos administrativos ainda são necessárias antes de produção.
+## Funcionalidades
+
+**Aluno**
+- Login com matrícula e senha, aviso de suspensão por atraso.
+- Catálogo com busca por título, autor, ISBN e filtro por categoria e disponibilidade.
+- Página da obra com exemplares, situação e histórico de reserva.
+- Reserva de exemplar disponível, entrada na fila de espera e cancelamento.
+- Acompanhamento de reservas, fila, empréstimos, atrasos e notificações.
+- Renovação de empréstimo (15 dias, 1 renovação por empréstimo, bloqueada em atraso ou quando há fila).
+
+**Bibliotecário**
+- Painel com indicadores e operações rápidas.
+- Acervo: cadastro de obras e exemplares, ajuste de status (disponível, emprestado, reservado, manutenção) e localização.
+- Alunos: cadastro, edição, ativação/desativação, suspensão e redefinição de senha.
+- Reservas: acompanhamento de confirmadas e fila de espera, confirmação manual e cancelamento.
+- Empréstimos: registro de retirada, renovação e busca por aluno, obra ou tombo.
+- Devoluções: registro de devolução, atraso, suspensão proporcional e promoção da fila.
+- Relatórios: indicadores, acervo por categoria, obras mais emprestadas, movimentação e atrasos.
+
+## Regras de negócio
+| Regra | Valor |
+|---|---|
+| Prazo do empréstimo | 15 dias |
+| Renovação | 15 dias, 1 renovação por empréstimo |
+| Retirada da reserva | 48 horas |
+| Empréstimos simultâneos por aluno | 3 |
+| Atraso | gera suspensão do aluno pelo número de dias de atraso |
+
+## Testes
+```bash
+php tests/run.php           # testes unitários, sem banco de dados
+php tests/integration.php   # testes de integração (exige MySQL/MariaDB)
+```
+O teste de integração usa as variáveis `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` e `DB_PASS`,
+cria dados próprios e os remove ao final. Se o banco não estiver disponível, ele é ignorado com aviso.
+O GitHub Actions executa os dois: unitários em cada push e integração com um serviço MySQL 8.
 
 ## Segurança
 - Use usuário MySQL dedicado com privilégios mínimos, nunca `root` em produção.
 - Use HTTPS em produção.
 - Mantenha `DEBUG=0` em produção.
 - Faça backup antes de migrações.
+- Todas as operações de escrita exigem token CSRF e perfil de acesso.
 
 ## Planejamento do projeto
 
@@ -62,15 +105,14 @@ Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) para entender:
 - quais tecnologias e estrutura serão utilizadas;
 - as etapas de desenvolvimento e os critérios de conclusão.
 
-
 ## Publicação de teste no Railway
 
 O repositório inclui `Dockerfile` e `railway.json` para executar PHP/Apache no Railway.
 
 1. Conecte o Railway à sua conta GitHub e selecione este repositório.
 2. Adicione um serviço **MySQL** ao projeto Railway.
-3. Configure a aplicação com as referências do MySQL: `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER` e `MYSQLPASSWORD` (o código já reconhece essas variáveis). Também defina `APP_URL` com o domínio público gerado e `DEBUG=0`.
-4. No banco MySQL recém-criado e vazio, execute `sql/railway-schema.sql`. Ele cria as tabelas no banco selecionado sem apagar nem criar bancos.
-5. Para uma demonstração com dados fictícios, importe `sql/seed.sql` somente nesse banco de teste. **Ele apaga os registros existentes das tabelas**. A conta demonstrativa é matrícula `BIB001`, senha `123456`; altere-a antes de qualquer uso real.
+3. Configure a aplicação com as referências do MySQL: `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER` e `MYSQLPASSWORD` (o código já reconhece essas variáveis). Também defina `APP_URL` com o domínio público gerado (sem barra final) e `DEBUG=0`.
+4. No banco MySQL recém-criado e vazio, execute `sql/railway-schema.sql` selecionando o banco da aplicação. Ele cria as tabelas, índices e views sem apagar nem criar bancos, e pode ser executado mais de uma vez.
+5. Para uma demonstração com dados fictícios, importe `sql/seed.sql` somente nesse banco de teste, também com o banco selecionado. **Ele apaga os registros existentes das tabelas**. A conta demonstrativa é matrícula `BIB001`, senha `123456`; altere-a antes de qualquer uso real.
 
-Não publique dados reais de alunos em uma instância de demonstração. O sistema ainda requer validação de integração antes de uso em produção.
+Não publique dados reais de alunos em uma instância de demonstração.

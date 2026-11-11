@@ -61,10 +61,12 @@ A aplicação utiliza PHP e MySQL diretamente; não depende de um framework PHP 
 - `app/config/`: configurações gerais e conexão com o banco.
 - `app/helpers/`: funções auxiliares e renderização de páginas.
 - `public/`: ponto de entrada e páginas acessíveis pelo navegador.
+- `public/assets/`: folha de estilo e script da interface.
 - `views/`: modelos visuais das páginas.
 - `sql/schema.sql`: criação da estrutura do banco de dados.
+- `sql/railway-schema.sql`: criação idempotente das tabelas em um banco já existente.
 - `sql/seed.sql`: dados fictícios para demonstração e desenvolvimento.
-- `tests/`: espaço destinado aos testes automatizados.
+- `tests/`: testes unitários e de integração.
 - `.github/workflows/`: automações do GitHub Actions.
 
 ## 6. Modelo de dados
@@ -88,26 +90,29 @@ Também existem visões SQL para consultar disponibilidade, empréstimos ativos 
 - [x] Configuração de conexão com MySQL via PDO.
 - [x] Estrutura inicial do banco de dados.
 - [x] Configurações por variáveis de ambiente.
+- [x] Geração de URLs a partir de `APP_URL` (funciona na raiz do domínio ou em subpasta).
 
 ### Etapa 2 — Acesso e experiência do aluno
 - [x] Base de autenticação e controle de perfil.
 - [x] Catálogo e páginas do aluno.
 - [x] Fluxos iniciais de reserva e fila de espera.
+- [x] Renovação de empréstimo com validação de prazo, atraso e fila.
+- [x] Notificações, perfil e alteração de senha.
 - [ ] Validar todos os cenários de uso com dados de teste.
 
 ### Etapa 3 — Administração da biblioteca
-- [ ] Painel do bibliotecário.
-- [ ] Cadastro, edição e consulta de alunos.
-- [ ] Cadastro de obras e exemplares.
-- [ ] Registro e gestão de empréstimos e devoluções.
-- [ ] Gestão de reservas e fila de espera.
-- [ ] Relatórios de movimentação e atrasos.
+- [x] Painel do bibliotecário.
+- [x] Cadastro, edição e consulta de alunos.
+- [x] Cadastro de obras e exemplares.
+- [x] Registro e gestão de empréstimos e devoluções.
+- [x] Gestão de reservas e fila de espera.
+- [x] Relatórios de movimentação e atrasos.
 
 ### Etapa 4 — Qualidade e segurança
-- [ ] Testes automatizados das regras de negócio.
-- [ ] Testes dos fluxos principais de aluno e bibliotecário.
-- [ ] Revisão de permissões e proteção das rotas.
-- [ ] Validação de formulários e tratamento de erros.
+- [x] Testes automatizados das regras de negócio (testes de integração com MySQL).
+- [x] Testes dos fluxos principais de aluno e bibliotecário.
+- [x] Revisão de permissões e proteção das rotas.
+- [x] Validação de formulários e tratamento de erros.
 - [ ] Verificação de acessibilidade e responsividade.
 
 ### Etapa 5 — Publicação e manutenção
