@@ -142,6 +142,22 @@ CREATE TABLE `logs` (
     CONSTRAINT `fk_log_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 8. Tokens de acesso da API REST
+CREATE TABLE `api_tokens` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `usuario_id` INT UNSIGNED NOT NULL,
+    `token_hash` CHAR(64) NOT NULL,
+    `descricao` VARCHAR(120) DEFAULT NULL,
+    `criado_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `ultimo_uso` TIMESTAMP NULL DEFAULT NULL,
+    `expira_em` TIMESTAMP NULL DEFAULT NULL,
+    `revogado` TINYINT(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_token_hash` (`token_hash`),
+    KEY `idx_usuario` (`usuario_id`),
+    CONSTRAINT `fk_api_token_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- View: Disponibilidade por obra
 CREATE OR REPLACE VIEW `vw_disponibilidade` AS
 SELECT

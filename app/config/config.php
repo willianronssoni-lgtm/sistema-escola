@@ -48,3 +48,8 @@ require_once APP_PATH . '/config/database.php';
 require_once APP_PATH . '/helpers/functions.php';
 require_once APP_PATH . '/helpers/view.php';
 require_once APP_PATH . '/auth/auth.php';
+require_once APP_PATH . '/services/emprestimo.php';
+require_once APP_PATH . '/services/reserva.php';
+require_once APP_PATH . '/api/http.php';
+require_once APP_PATH . '/api/auth.php';
+require_once APP_PATH . '/api/router.php';

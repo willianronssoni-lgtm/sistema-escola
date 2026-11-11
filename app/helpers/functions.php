@@ -69,6 +69,35 @@ function is_bibliotecario(): bool {
     return usuario_tipo() === 'bibliotecario';
 }
 
+// ============================================================
+// ATOR DA REQUISIÇÃO
+//
+// A API REST não usa sessão: o ator vem do token de acesso. Estas
+// funções unificam os dois contextos para que as regras de negócio
+// e a auditoria funcionem igual nas páginas e na API.
+// ============================================================
+
+function ator_id(): ?int {
+    // Na API o ator vem do token e tem precedência sobre a sessão.
+    if (isset($GLOBALS['api_ator']['id'])) {
+        return (int)$GLOBALS['api_ator']['id'];
+    }
+
+    return isset($_SESSION['usuario']['id']) ? (int)$_SESSION['usuario']['id'] : null;
+}
+
+function ator_tipo(): ?string {
+    if (isset($GLOBALS['api_ator']['tipo'])) {
+        return (string)$GLOBALS['api_ator']['tipo'];
+    }
+
+    return isset($_SESSION['usuario']['tipo']) ? (string)$_SESSION['usuario']['tipo'] : null;
+}
+
+function ator_e_bibliotecario(): bool {
+    return ator_tipo() === 'bibliotecario';
+}
+
 function require_login(): void {
     if (!usuario_logado()) {
         redirect(url('login.php'));
@@ -382,7 +411,7 @@ function registrar_log(string $acao, ?string $entidade = null, ?int $entidade_id
         VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([
-        usuario_id(),
+        ator_id(),
         $acao,
         $entidade,
         $entidade_id,

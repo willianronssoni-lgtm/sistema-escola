@@ -1,0 +1,13 @@
+# Reescrita das rotas da API REST.
+#
+# O servidor Apache aponta a raiz do site para a pasta public/.
+# Com esta regra, /api/v1/catalogo é servido por /api/index.php.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^api/(.*)$ api/index.php?rota=v1/$1 [L,QSA]
+</IfModule>
+
+# Impede a listagem de diretórios.
+Options -Indexes

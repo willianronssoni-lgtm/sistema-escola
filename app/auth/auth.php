@@ -72,7 +72,7 @@ function alterar_senha(int $usuario_id, string $senha_atual, string $nova_senha)
 }
 
 function redefinir_senha_bibliotecario(int $usuario_id, string $nova_senha): array {
-    if (!is_bibliotecario()) {
+    if (!ator_e_bibliotecario()) {
         return ['sucesso' => false, 'erro' => 'Permissão negada'];
     }
     
@@ -91,7 +91,7 @@ function redefinir_senha_bibliotecario(int $usuario_id, string $nova_senha): arr
 }
 
 function criar_usuario(array $dados): array {
-    if (!is_bibliotecario()) {
+    if (!ator_e_bibliotecario()) {
         return ['sucesso' => false, 'erro' => 'Permissão negada'];
     }
     
@@ -149,7 +149,7 @@ function criar_usuario(array $dados): array {
 }
 
 function atualizar_usuario(int $id, array $dados): array {
-    if (!is_bibliotecario()) {
+    if (!ator_e_bibliotecario()) {
         return ['sucesso' => false, 'erro' => 'Permissão negada'];
     }
     
@@ -214,7 +214,7 @@ function atualizar_usuario(int $id, array $dados): array {
 }
 
 function excluir_usuario(int $id): array {
-    if (!is_bibliotecario()) {
+    if (!ator_e_bibliotecario()) {
         return ['sucesso' => false, 'erro' => 'Permissão negada'];
     }
     
