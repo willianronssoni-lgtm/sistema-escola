@@ -19,7 +19,6 @@ RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
 COPY . /var/www/html/
 RUN mkdir -p /var/www/html/uploads/capas \
     && chown -R www-data:www-data /var/www/html/uploads \
-    && find /var/www/html -type d -exec chmod 755 {} \\; \
-    && find /var/www/html -type f -exec chmod 644 {} \\;
+    && chmod -R u=rwX,g=rX,o=rX /var/www/html
 
 EXPOSE 8080
