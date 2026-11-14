@@ -1,41 +1,121 @@
-/* Biblioteca Escolar - estilos próprios (complementam o Bootstrap 5) */
-
+/* Biblioteca Escolar — identidade visual e temas claro/escuro */
 :root {
-    --be-primary: #0d6efd;
-    --be-bg: #f5f7fb;
+    color-scheme: light;
+    --be-primary: #2457d6;
+    --be-bg: #f4f6fb;
+    --be-surface: #ffffff;
+    --be-surface-soft: #f8faff;
+    --be-text: #172033;
+    --be-muted: #687386;
+    --be-border: #e4e9f2;
+    --be-shadow: 0 8px 24px rgba(22, 34, 59, .06);
+    --be-input: #ffffff;
 }
 
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --be-primary: #7da2ff;
+    --be-bg: #111827;
+    --be-surface: #1b2535;
+    --be-surface-soft: #202d40;
+    --be-text: #e8edf7;
+    --be-muted: #a4b0c2;
+    --be-border: #344156;
+    --be-shadow: 0 10px 28px rgba(0, 0, 0, .22);
+    --be-input: #172233;
+}
+
+* { box-sizing: border-box; }
+
 body {
-    background-color: var(--be-bg);
+    background: var(--be-bg);
+    color: var(--be-text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color .2s ease, color .2s ease;
 }
 
-main {
-    flex: 1 0 auto;
+main { flex: 1 0 auto; }
+
+.navbar.bg-primary {
+    background: #193b82 !important;
 }
+html[data-theme="dark"] .navbar.bg-primary {
+    background: #172338 !important;
+    border-bottom: 1px solid var(--be-border);
+}
+.navbar-brand { letter-spacing: -.02em; }
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    border-color: rgba(255,255,255,.55);
+    color: #fff;
+}
+.theme-toggle:hover, .theme-toggle:focus {
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    border-color: #fff;
+}
+
+.card, .modal-content, .dropdown-menu, .list-group-item,
+.filter-bar, .table, .accordion-item {
+    background-color: var(--be-surface);
+    color: var(--be-text);
+    border-color: var(--be-border);
+}
+.card { border-radius: .9rem; box-shadow: var(--be-shadow); }
+.card-header, .card-footer { background: var(--be-surface-soft); border-color: var(--be-border); }
+.dropdown-menu { box-shadow: var(--be-shadow); }
+.dropdown-item, .dropdown-header { color: var(--be-text); }
+.dropdown-item:hover, .dropdown-item:focus { background: var(--be-surface-soft); color: var(--be-text); }
+.dropdown-divider { border-color: var(--be-border); }
+
+.form-control, .form-select, .input-group-text {
+    background-color: var(--be-input);
+    color: var(--be-text);
+    border-color: var(--be-border);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--be-input);
+    color: var(--be-text);
+}
+.form-control::placeholder { color: var(--be-muted); }
+.form-control:disabled, .form-select:disabled { background: var(--be-surface-soft); }
+
+.table {
+    --bs-table-bg: var(--be-surface);
+    --bs-table-color: var(--be-text);
+    --bs-table-border-color: var(--be-border);
+    --bs-table-striped-bg: var(--be-surface-soft);
+    --bs-table-striped-color: var(--be-text);
+    --bs-table-hover-bg: var(--be-surface-soft);
+    --bs-table-hover-color: var(--be-text);
+}
+.table th { white-space: nowrap; }
+.table td { vertical-align: middle; }
+
+.text-muted { color: var(--be-muted) !important; }
+.bg-light { background-color: var(--be-surface-soft) !important; }
+.border, .border-top, .border-bottom { border-color: var(--be-border) !important; }
+.link-secondary { color: var(--be-muted) !important; }
+html[data-theme="dark"] .text-dark { color: var(--be-text) !important; }
+html[data-theme="dark"] .bg-white { background-color: var(--be-surface) !important; }
+html[data-theme="dark"] .alert-light { background: var(--be-surface-soft); color: var(--be-text); border-color: var(--be-border); }
+
+footer {
+    background: var(--be-surface) !important;
+    color: var(--be-text);
+    border-color: var(--be-border) !important;
+}
+footer .text-muted { color: var(--be-muted) !important; }
 
 /* Cartões de ação da página inicial */
-.action-card {
-    transition: transform .15s ease-in-out, box-shadow .15s ease-in-out;
-}
+.action-card { transition: transform .15s ease, box-shadow .15s ease; }
+.action-card:hover { transform: translateY(-2px); box-shadow: var(--be-shadow) !important; }
 
-.action-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .12) !important;
-}
-
-/* Tabelas */
-.table th {
-    white-space: nowrap;
-}
-
-.table td {
-    vertical-align: middle;
-}
-
-/* Capa do livro */
+/* Capas e filtros */
 .book-cover {
     width: 100%;
     max-width: 180px;
@@ -44,37 +124,21 @@ main {
     border-radius: .5rem;
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .15);
 }
-
-/* Filtros do catálogo */
 .filter-bar {
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, .08);
+    border: 1px solid var(--be-border);
     border-radius: .75rem;
     padding: 1rem;
 }
 
-/* Estado vazio das listas */
-.empty-state {
-    text-align: center;
-    padding: 2.5rem 1rem;
-    color: #6c757d;
-}
+/* Estado vazio e status */
+.empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--be-muted); }
+.badge { font-size: .75rem; font-weight: 600; }
+a { text-underline-offset: .15em; }
 
-/* Badges de status com fonte um pouco menor */
-.badge {
-    font-size: .75rem;
-    font-weight: 600;
+@media (max-width: 991.98px) {
+    .theme-toggle { margin: .5rem 0; }
 }
-
-/* Impressão de relatórios */
 @media print {
-    .navbar,
-    footer,
-    .no-print {
-        display: none !important;
-    }
-
-    body {
-        background: #fff;
-    }
+    .navbar, footer, .no-print { display: none !important; }
+    body { background: #fff; color: #000; }
 }
