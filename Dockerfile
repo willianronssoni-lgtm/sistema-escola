@@ -3,7 +3,8 @@ FROM php:8.2-apache
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev \
     && docker-php-ext-install pdo_mysql mbstring \
-    && a2enmod rewrite \
+    && a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork rewrite \
     && rm -rf /var/lib/apt/lists/*
 
 # Railway fornece PORT=8080 por padrão para este serviço.
