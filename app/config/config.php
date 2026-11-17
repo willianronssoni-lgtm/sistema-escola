@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 // Iniciar sessão com cookies mais seguros.
 if (session_status() === PHP_SESSION_NONE) {
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
     $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $forwardedProto === 'https'
         || (($_SERVER['SERVER_PORT'] ?? null) == 443);
 
     ini_set('session.cookie_httponly', '1');
