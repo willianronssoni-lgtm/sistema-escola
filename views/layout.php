@@ -14,7 +14,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="<?= url('assets/css/style.css') ?>?v=2" rel="stylesheet">
+    <link href="<?= url('assets/css/style.css') ?>?v=3" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
@@ -60,6 +60,18 @@
                     <?php endif; ?>
                 </ul>
                 <ul class="navbar-nav align-items-lg-center">
+                    <li class="nav-item me-lg-2">
+                        <label class="visually-hidden" for="appearanceSelect">Aparência do sistema</label>
+                        <select id="appearanceSelect" class="form-select form-select-sm appearance-select" data-appearance-select aria-label="Escolher aparência do sistema">
+                            <option value="roxo">Roxo discreto</option>
+                            <option value="azul">Azul</option>
+                            <option value="branco">Branco</option>
+                            <option value="dourado">Dourado</option>
+                            <option value="laranja">Laranja</option>
+                            <option value="bordo">Bordô</option>
+                            <option value="esmeralda">Verde esmeralda</option>
+                        </select>
+                    </li>
                     <li class="nav-item me-lg-2">
                         <button type="button" class="btn btn-sm btn-outline-light theme-toggle" data-theme-toggle aria-label="Ativar modo escuro" title="Ativar modo escuro">
                             <i class="bi bi-moon-stars"></i><span data-theme-label>Modo escuro</span>
@@ -138,7 +150,7 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= url('assets/js/main.js') ?>?v=2"></script>
+    <script src="<?= url('assets/js/main.js') ?>?v=3"></script>
     <?= $scripts ?>
 </body>
 </html>
