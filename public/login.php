@@ -7,17 +7,18 @@ if (usuario_logado()) {
 }
 
 $erro = '';
+$identificador = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csfr_verify($_POST['csrf_token'] ?? '')) {
         $erro = 'Token inválido. Tente novamente.';
     } else {
-        $matricula = trim($_POST['matricula'] ?? '');
+        $identificador = trim($_POST['identificador'] ?? '');
         $senha = $_POST['senha'] ?? '';
         
-        if (!$matricula || !$senha) {
+        if (!$identificador || !$senha) {
             $erro = 'Preencha todos os campos';
         } else {
-            $resultado = login($matricula, $senha);
+            $resultado = login($identificador, $senha);
             if ($resultado['sucesso']) {
                 redirect(is_bibliotecario() ? url('painel.php') : url('index.php'));
             } else {
@@ -30,4 +31,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 view('login', [
     'titulo' => 'Login',
     'erro' => $erro,
+    'identificador' => $identificador,
 ]);
