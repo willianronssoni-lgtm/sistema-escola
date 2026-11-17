@@ -21,7 +21,20 @@ if (session_status() === PHP_SESSION_NONE) {
 // Configurações da aplicação: podem ser sobrescritas por variáveis de ambiente.
 define('APP_NAME', getenv('APP_NAME') ?: 'Biblioteca Escolar');
 define('APP_VERSION', '1.0.0');
-define('APP_URL', rtrim(getenv('APP_URL') ?: 'http://localhost/biblioteca/public', '/'));
+$appUrl = getenv('APP_URL');
+if (!$appUrl) {
+    // Em hospedagens atrás de proxy (como Render), respeita o protocolo externo.
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    if (!preg_match('/^[a-z0-9.-]+(?::[0-9]{1,5})?$/i', $host)) {
+        $host = 'localhost';
+    }
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $forwardedProto === 'https'
+        || (($_SERVER['SERVER_PORT'] ?? null) == 443);
+    $appUrl = ($https ? 'https://' : 'http://') . $host;
+}
+define('APP_URL', rtrim($appUrl, '/'));
 
 define('PRAZO_EMPRESTIMO_DIAS', 15);
 define('PRAZO_RENOVACAO_DIAS', 15);
