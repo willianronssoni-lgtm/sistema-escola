@@ -373,3 +373,21 @@ html:not([data-theme="dark"]) .container,
 html:not([data-theme="dark"]) .container-fluid {
     background-color: #C0C0C0 !important;
 }
+
+
+/* Modo claro prateado: regra final para prevalecer sobre estilos anteriores */
+html:not([data-theme="dark"]) {
+    background: #C0C0C0 !important;
+    color-scheme: light !important;
+    --be-bg: #C0C0C0 !important;
+    --bs-body-bg: #C0C0C0 !important;
+}
+html:not([data-theme="dark"]) body,
+html:not([data-theme="dark"]) body main,
+html:not([data-theme="dark"]) body main.container,
+html:not([data-theme="dark"]) body .container,
+html:not([data-theme="dark"]) body .container-fluid {
+    background: #C0C0C0 !important;
+    background-color: #C0C0C0 !important;
+    color: #292929 !important;
+}
