@@ -5,14 +5,16 @@
 
 declare(strict_types=1);
 
-function login(string $matricula, string $senha): array {
+function login(string $identificador, string $senha): array {
     $db = db();
-    $stmt = $db->prepare("SELECT * FROM usuarios WHERE matricula = ? AND ativo = 1");
-    $stmt->execute([$matricula]);
+    // O acesso principal usa o e-mail escolar; a matrícula antiga continua aceita
+    // temporariamente para não bloquear contas ainda sem e-mail cadastrado.
+    $stmt = $db->prepare("SELECT * FROM usuarios WHERE (email = ? OR matricula = ?) AND ativo = 1 ORDER BY (email = ?) DESC LIMIT 1");
+    $stmt->execute([$identificador, $identificador, $identificador]);
     $usuario = $stmt->fetch();
     
     if (!$usuario || !password_verify($senha, $usuario['senha_hash'])) {
-        registrar_log('login_falhou', 'usuarios', null, ['matricula' => $matricula]);
+        registrar_log('login_falhou', 'usuarios', null, ['identificador' => $identificador]);
         return ['sucesso' => false, 'erro' => 'Matrícula ou senha inválidos'];
     }
     
