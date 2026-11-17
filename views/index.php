@@ -58,7 +58,7 @@ $destaques = $destaques ?? [];
             <h3 class="h5 mb-3"><i class="bi bi-lightning-fill me-2"></i>Ações Rápidas</h3>
         </div>
         <div class="col-6 col-md-3">
-            <a href="<?= url('catalogo.php') ?>" class="card action-card h-100 text-decoration-none">
+            <a href="catalogo.php" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-search fs-1 text-primary"></i>
                     <h5 class="mt-2 mb-0">Buscar Livros</h5>
@@ -182,7 +182,7 @@ $destaques = $destaques ?? [];
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="<?= url('catalogo.php') ?>" class="card action-card h-100 text-decoration-none">
+            <a href="catalogo.php" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-search fs-1 text-secondary"></i>
                     <h5 class="mt-2 mb-0">Catálogo</h5>
@@ -197,7 +197,7 @@ $destaques = $destaques ?? [];
             <h3 class="h5 mb-3"><i class="bi bi-lightning-fill me-2"></i>Comece por aqui</h3>
         </div>
         <div class="col-6 col-md-3">
-            <a href="<?= url('catalogo.php') ?>" class="card action-card h-100 text-decoration-none">
+            <a href="catalogo.php" class="card action-card h-100 text-decoration-none">
                 <div class="card-body text-center">
                     <i class="bi bi-search fs-1 text-primary"></i>
                     <h5 class="mt-2 mb-0">Buscar Livros</h5>
