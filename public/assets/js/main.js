@@ -54,6 +54,18 @@
             select.addEventListener('change', function () { applyAppearance(select.value); });
         });
 
+        document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var input = document.getElementById(button.getAttribute('data-password-toggle'));
+                if (!input) return;
+                var showing = input.type === 'password';
+                input.type = showing ? 'text' : 'password';
+                var icon = button.querySelector('i');
+                if (icon) icon.className = showing ? 'bi bi-eye-slash' : 'bi bi-eye';
+                button.setAttribute('aria-label', showing ? 'Ocultar senha' : 'Mostrar senha');
+            });
+        });
+
         document.querySelectorAll('form[data-confirm]').forEach(function (form) {
             form.addEventListener('submit', function (event) {
                 if (!window.confirm(form.getAttribute('data-confirm'))) event.preventDefault();
