@@ -7,9 +7,7 @@
     <script>
         (function () {
             try {
-                var tema = localStorage.getItem('biblioteca-escolar-theme');
                 var aparencia = localStorage.getItem('biblioteca-escolar-appearance');
-                if (tema === 'dark' || tema === 'light') document.documentElement.setAttribute('data-theme', tema);
                 if (['roxo','azul','branco','dourado','laranja','bordo','esmeralda'].indexOf(aparencia) !== -1) document.documentElement.setAttribute('data-appearance', aparencia);
             } catch (e) {}
         })();
