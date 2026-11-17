@@ -316,3 +316,46 @@ html:not([data-theme="dark"]) .bg-light { background-color: var(--be-surface-sof
 html:not([data-theme="dark"]) .form-control,
 html:not([data-theme="dark"]) .form-select,
 html:not([data-theme="dark"]) .input-group-text { background-color: var(--be-input); }
+
+
+/* Correção reforçada do fundo claro e variáveis nativas do Bootstrap */
+html:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body {
+    --be-bg: #F5F5F5 !important;
+    --be-surface: #FFFFFF !important;
+    --be-surface-soft: #FAFAFA !important;
+    --be-border: #E5E5E5 !important;
+    --be-text: #292929 !important;
+    --be-muted: #686868 !important;
+    --be-input: #FFFFFF !important;
+    --bs-body-bg: #F5F5F5 !important;
+    --bs-body-color: #292929 !important;
+    --bs-secondary-bg: #FAFAFA !important;
+    --bs-tertiary-bg: #FAFAFA !important;
+    --bs-border-color: #E5E5E5 !important;
+    color-scheme: light;
+}
+html:not([data-theme="dark"]) body,
+html:not([data-theme="dark"]) main,
+html:not([data-theme="dark"]) .container,
+html:not([data-theme="dark"]) .container-fluid {
+    background-color: #F5F5F5 !important;
+    color: #292929;
+}
+html:not([data-theme="dark"]) .card,
+html:not([data-theme="dark"]) .modal-content,
+html:not([data-theme="dark"]) .dropdown-menu,
+html:not([data-theme="dark"]) .list-group-item,
+html:not([data-theme="dark"]) .table,
+html:not([data-theme="dark"]) .accordion-item,
+html:not([data-theme="dark"]) footer,
+html:not([data-theme="dark"]) .login-panel {
+    background-color: #FFFFFF !important;
+}
+html:not([data-theme="dark"]) .card-header,
+html:not([data-theme="dark"]) .card-footer,
+html:not([data-theme="dark"]) .bg-light,
+html:not([data-theme="dark"]) .bg-body-secondary,
+html:not([data-theme="dark"]) .bg-body-tertiary {
+    background-color: #FAFAFA !important;
+}
