@@ -170,3 +170,25 @@ O arquivo `sql/seed.sql` contém dados fictícios para desenvolvimento. **Ele li
 ## 10. Situação do projeto
 
 Este planejamento descreve o destino do projeto, não uma declaração de que todas as funcionalidades já estão prontas. Consulte o README e o histórico de commits para acompanhar o que já foi implementado. As caixas das etapas devem ser atualizadas conforme cada entrega for concluída.
+
+
+## 11. Decisões visuais aprovadas para a próxima evolução
+
+- [x] Fonte Quicksand para títulos, cabeçalhos e identidade visual.
+- [x] Fonte Nunito para textos, menus, formulários, botões e tabelas.
+- [x] Manter as sete aparências (roxo, azul, branco, dourado, laranja, bordô e esmeralda) e os modos claro/escuro.
+- [x] Substituir a faixa superior larga por uma barra compacta no canto superior direito, com comportamento responsivo.
+- [x] Redesenhar a tela de login com identidade visual própria e autenticação real já existente.
+- [x] Ilustração vetorial de livro aberto com as páginas voltadas para a tela; a cor da capa acompanha a aparência selecionada.
+- [x] No modo escuro, ativar o brilho quente e discreto da luminária sobre o livro.
+- [ ] Validar visualmente a tela em celular e computador após a publicação.
+
+## 12. Próximas entregas funcionais
+
+As etapas abaixo continuam planejadas e não devem ser consideradas implementadas apenas por constarem neste documento:
+1. Arquitetura multi-escola e isolamento de dados por instituição.
+2. Perfis administrativos ampliados e gestão de permissões.
+3. Área do aluno e identificação por QR Code.
+4. Notificações automáticas por canais configuráveis.
+5. Rotina de backup externo e testes de restauração.
+6. Revisão de LGPD, auditoria e testes de segurança.
