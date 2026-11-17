@@ -1,6 +1,7 @@
 <?php
 $titulo = $titulo ?? 'Entrar';
 $erro = $erro ?? '';
+$identificador = $identificador ?? '';
 ?>
 
 <section class="login-screen">
@@ -50,9 +51,9 @@ $erro = $erro ?? '';
             <form method="post" class="login-form" novalidate>
                 <?= csfr_input() ?>
                 <div class="mb-3">
-                    <label for="matricula" class="form-label">Matrícula</label>
-                    <div class="login-input-wrap"><i class="bi bi-person" aria-hidden="true"></i>
-                        <input type="text" class="form-control" id="matricula" name="matricula" placeholder="Digite sua matrícula" required autofocus autocomplete="username">
+                    <label for="identificador" class="form-label">E-mail escolar</label>
+                    <div class="login-input-wrap"><i class="bi bi-envelope" aria-hidden="true"></i>
+                        <input type="text" class="form-control" id="identificador" name="identificador" value="<?= e($identificador) ?>" placeholder="seunome@escola" required autofocus autocomplete="username" inputmode="email">
                     </div>
                 </div>
                 <div class="mb-3">
@@ -64,7 +65,7 @@ $erro = $erro ?? '';
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg w-100 login-submit"><i class="bi bi-box-arrow-in-right me-2"></i>Entrar</button>
             </form>
-            <a class="login-back-link" href="<?= url('index.php') ?>"><i class="bi bi-arrow-left me-1"></i>Voltar ao início</a>
+            <a class="login-back-link" href="<?= url() ?>"><i class="bi bi-arrow-left me-1"></i>Voltar ao início</a>
             <p class="login-footnote">Acesso protegido • Biblioteca Escolar</p>
         </div>
     </div>
