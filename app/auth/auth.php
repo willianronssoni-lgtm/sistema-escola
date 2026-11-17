@@ -15,7 +15,7 @@ function login(string $identificador, string $senha): array {
     
     if (!$usuario || !password_verify($senha, $usuario['senha_hash'])) {
         registrar_log('login_falhou', 'usuarios', null, ['identificador' => $identificador]);
-        return ['sucesso' => false, 'erro' => 'Matrícula ou senha inválidos'];
+        return ['sucesso' => false, 'erro' => 'E-mail escolar ou senha inválidos'];
     }
     
     // Verificar se aluno está suspenso
