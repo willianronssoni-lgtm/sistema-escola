@@ -5,6 +5,13 @@
 
 declare(strict_types=1);
 
+// Ambiente de produção: nunca exibir erros, exceções ou argumentos de funções
+// no navegador (podem conter dados enviados pelo usuário).
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+
 // Iniciar sessão com cookies mais seguros.
 if (session_status() === PHP_SESSION_NONE) {
     $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
