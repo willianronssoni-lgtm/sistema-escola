@@ -359,3 +359,17 @@ html:not([data-theme="dark"]) .bg-body-secondary,
 html:not([data-theme="dark"]) .bg-body-tertiary {
     background-color: #FAFAFA !important;
 }
+
+
+/* Fundo prata solicitado para o modo claro */
+html:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body {
+    --be-bg: #C0C0C0 !important;
+    --bs-body-bg: #C0C0C0 !important;
+}
+html:not([data-theme="dark"]) body,
+html:not([data-theme="dark"]) main,
+html:not([data-theme="dark"]) .container,
+html:not([data-theme="dark"]) .container-fluid {
+    background-color: #C0C0C0 !important;
+}
