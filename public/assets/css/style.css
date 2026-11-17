@@ -166,7 +166,7 @@ a { text-underline-offset: .15em; }
 
 
 /* Identidade tipográfica */
-:root { --font-heading:'Quicksand',sans-serif; --font-body:'Nunito',sans-serif; --book-color:var(--be-primary); --book-color-deep:var(--be-primary-strong); }
+:root { --font-heading:'Manrope',sans-serif; --font-body:'DM Sans',sans-serif; --book-color:var(--be-primary); --book-color-deep:var(--be-primary-strong); }
 body { font-family:var(--font-body); }
 h1,h2,h3,h4,h5,h6,.navbar-brand,.btn,.login-brand h1 { font-family:var(--font-heading); }
 .navbar,.dropdown-menu,.form-control,.form-select,.table,.card { font-family:var(--font-body); }
@@ -228,4 +228,60 @@ html[data-theme="dark"] .login-lamp .lamp-shade:after { content:""; position:abs
  .login-book-wrap { margin-bottom:2rem; width:94%; }
  .login-lamp { transform:scale(.65); transform-origin:top left; left:3%; top:2%; }
  .login-visual-caption { left:1rem; bottom:.5rem; font-size:.85rem; }
+}
+
+
+/* Revisão visual: remove o azul padrão do Bootstrap e respeita a aparência ativa */
+:root {
+    --font-heading: 'Manrope', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --bs-primary: var(--be-primary-strong);
+    --bs-primary-rgb: 93, 74, 141;
+    --bs-link-color: var(--be-primary-strong);
+    --bs-link-hover-color: var(--be-primary);
+    --bs-focus-ring-color: color-mix(in srgb, var(--be-primary) 28%, transparent);
+}
+html[data-appearance="azul"] { --bs-primary-rgb: 40, 91, 159; }
+html[data-appearance="branco"] { --bs-primary-rgb: 63, 75, 94; }
+html[data-appearance="dourado"] { --bs-primary-rgb: 134, 101, 38; }
+html[data-appearance="laranja"] { --bs-primary-rgb: 173, 84, 32; }
+html[data-appearance="bordo"] { --bs-primary-rgb: 104, 45, 64; }
+html[data-appearance="esmeralda"] { --bs-primary-rgb: 23, 100, 79; }
+html[data-theme="dark"] { --bs-primary: var(--be-primary); --bs-link-color: var(--be-primary); }
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--be-primary-strong);
+    --bs-btn-border-color: var(--be-primary-strong);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--be-primary);
+    --bs-btn-hover-border-color: var(--be-primary);
+    --bs-btn-active-bg: var(--be-primary);
+    --bs-btn-active-border-color: var(--be-primary);
+    --bs-btn-disabled-bg: var(--be-primary-strong);
+    --bs-btn-disabled-border-color: var(--be-primary-strong);
+}
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+    border-color: var(--be-primary) !important;
+    box-shadow: 0 0 0 .22rem color-mix(in srgb, var(--be-primary) 25%, transparent) !important;
+}
+.form-check-input:checked { background-color: var(--be-primary-strong) !important; border-color: var(--be-primary-strong) !important; }
+a, .link-primary { color: var(--be-primary-strong); }
+.navbar.bg-primary, .floating-toolbar { background: var(--be-primary-strong) !important; }
+html[data-theme="dark"] .floating-toolbar { background: var(--be-surface) !important; }
+.floating-toolbar .navbar-toggler { border-color: color-mix(in srgb, var(--be-primary) 45%, transparent); }
+.floating-toolbar .navbar-toggler-icon { filter: grayscale(1) brightness(4); }
+html[data-theme="dark"] .floating-toolbar .navbar-toggler-icon { filter: none; }
+.appearance-select { border-color: var(--be-border); }
+.theme-toggle { border-color: color-mix(in srgb, currentColor 35%, transparent); color: inherit; }
+.theme-toggle:hover, .theme-toggle:focus { background: var(--be-primary-soft); color: var(--be-text); border-color: var(--be-primary); }
+html[data-theme="dark"] .theme-toggle { color: var(--be-text); }
+html[data-theme="dark"] .appearance-select { background: var(--be-surface-soft); color: var(--be-text); border-color: var(--be-border); }
+.login-open-book { max-height: 390px; }
+.login-book-wrap { width: min(100%, 690px); margin-bottom: 2.4rem; }
+.login-visual { background: radial-gradient(ellipse at 50% 72%, var(--login-glow), transparent 52%), linear-gradient(145deg, color-mix(in srgb, var(--be-primary-strong) 30%, #171321), #171321 72%); }
+.login-visual-caption { color: rgba(255,255,255,.9); }
+html[data-theme="dark"] .login-visual { --login-glow: rgba(255, 207, 137, .2); }
+@media (max-width: 767.98px) {
+    .login-visual { min-height: 270px; }
+    .login-book-wrap { width: 100%; margin-bottom: 1.8rem; }
 }
