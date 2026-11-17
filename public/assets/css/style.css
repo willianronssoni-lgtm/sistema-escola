@@ -285,3 +285,34 @@ html[data-theme="dark"] .login-visual { --login-glow: rgba(255, 207, 137, .2); }
     .login-visual { min-height: 270px; }
     .login-book-wrap { width: 100%; margin-bottom: 1.8rem; }
 }
+
+
+/* Modo claro: branco levemente acinzentado, igual em todas as aparências */
+html:not([data-theme="dark"]) {
+    color-scheme: light;
+    --be-bg: #F5F5F5;
+    --be-surface: #FFFFFF;
+    --be-surface-soft: #FAFAFA;
+    --be-border: #E5E5E5;
+    --be-text: #292929;
+    --be-muted: #686868;
+    --be-input: #FFFFFF;
+    --be-shadow: 0 6px 20px rgba(0, 0, 0, .055);
+}
+html:not([data-theme="dark"]) body { background-color: var(--be-bg); color: var(--be-text); }
+html:not([data-theme="dark"]) .card,
+html:not([data-theme="dark"]) .modal-content,
+html:not([data-theme="dark"]) .dropdown-menu,
+html:not([data-theme="dark"]) .list-group-item,
+html:not([data-theme="dark"]) .filter-bar,
+html:not([data-theme="dark"]) .table,
+html:not([data-theme="dark"]) .accordion-item,
+html:not([data-theme="dark"]) footer { background-color: var(--be-surface); }
+html:not([data-theme="dark"]) .card-header,
+html:not([data-theme="dark"]) .card-footer,
+html:not([data-theme="dark"]) .dropdown-item:hover,
+html:not([data-theme="dark"]) .dropdown-item:focus,
+html:not([data-theme="dark"]) .bg-light { background-color: var(--be-surface-soft) !important; }
+html:not([data-theme="dark"]) .form-control,
+html:not([data-theme="dark"]) .form-select,
+html:not([data-theme="dark"]) .input-group-text { background-color: var(--be-input); }
