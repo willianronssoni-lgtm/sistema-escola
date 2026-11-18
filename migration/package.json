@@ -16,7 +16,9 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
-    "zod": "^4.1.12"
+    "zod": "^4.1.12",
+    "bcryptjs": "^3.0.2",
+    "express-rate-limit": "^8.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
