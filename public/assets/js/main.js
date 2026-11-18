@@ -33,12 +33,11 @@
         document.documentElement.dataset.beInitialized = 'true';
         var savedTheme = 'light', savedAppearance = 'roxo';
         try {
-            var t = localStorage.getItem(THEME_KEY), a = localStorage.getItem(APPEARANCE_KEY);
-            if (t === 'light' || t === 'dark') savedTheme = t;
+            var a = localStorage.getItem(APPEARANCE_KEY);
             if (APPEARANCES.indexOf(a) >= 0) savedAppearance = a;
         } catch (error) {}
         applyAppearance(savedAppearance);
-        applyTheme(document.documentElement.getAttribute('data-theme') || savedTheme);
+        applyTheme('light');
 
         document.addEventListener('click', function (event) {
             var button = event.target.closest('[data-theme-toggle]');
