@@ -391,3 +391,47 @@ html:not([data-theme="dark"]) body .container-fluid {
     background-color: #C0C0C0 !important;
     color: #292929 !important;
 }
+
+
+/* Botões acompanham automaticamente o tema claro/escuro e a aparência escolhida */
+html:not([data-theme="dark"]) .btn-dark,
+html:not([data-theme="dark"]) .btn-secondary {
+    --bs-btn-color: var(--be-text);
+    --bs-btn-bg: #FFFFFF;
+    --bs-btn-border-color: #A7A7A7;
+    --bs-btn-hover-color: var(--be-text);
+    --bs-btn-hover-bg: var(--be-primary-soft);
+    --bs-btn-hover-border-color: var(--be-primary);
+    --bs-btn-active-color: var(--be-text);
+    --bs-btn-active-bg: var(--be-primary-soft);
+    --bs-btn-active-border-color: var(--be-primary);
+    --bs-btn-disabled-color: #686868;
+    --bs-btn-disabled-bg: #E5E5E5;
+    --bs-btn-disabled-border-color: #D0D0D0;
+}
+html:not([data-theme="dark"]) .btn-outline-dark,
+html:not([data-theme="dark"]) .btn-outline-secondary,
+html:not([data-theme="dark"]) .btn-outline-light {
+    --bs-btn-color: var(--be-primary-strong);
+    --bs-btn-border-color: var(--be-primary);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-hover-bg: var(--be-primary-strong);
+    --bs-btn-hover-border-color: var(--be-primary-strong);
+    --bs-btn-active-color: #FFFFFF;
+    --bs-btn-active-bg: var(--be-primary-strong);
+    --bs-btn-active-border-color: var(--be-primary-strong);
+}
+html:not([data-theme="dark"]) .theme-toggle {
+    background: var(--be-surface) !important;
+    color: var(--be-primary-strong) !important;
+    border-color: var(--be-primary) !important;
+}
+html[data-theme="dark"] .btn-dark,
+html[data-theme="dark"] .btn-secondary {
+    --bs-btn-color: var(--be-text);
+    --bs-btn-bg: var(--be-surface-soft);
+    --bs-btn-border-color: var(--be-border);
+    --bs-btn-hover-color: var(--be-text);
+    --bs-btn-hover-bg: var(--be-primary-soft);
+    --bs-btn-hover-border-color: var(--be-primary);
+}
