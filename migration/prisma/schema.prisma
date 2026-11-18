@@ -8,76 +8,91 @@ datasource db {
 }
 
 enum UserType {
-  ALUNO
-  BIBLIOTECARIO
+  ALUNO          @map("aluno")
+  BIBLIOTECARIO  @map("bibliotecario")
 }
 
 enum CopyStatus {
-  DISPONIVEL
-  EMPRESTADO
-  RESERVADO
-  MANUTENCAO
+  DISPONIVEL @map("disponivel")
+  EMPRESTADO @map("emprestado")
+  RESERVADO  @map("reservado")
+  MANUTENCAO @map("manutencao")
 }
 
 enum ReservationStatus {
-  PENDENTE
-  CONFIRMADA
-  NA_FILA
-  EXPIRADA
-  CANCELADA
-  ATENDIDA
+  PENDENTE   @map("pendente")
+  CONFIRMADA @map("confirmada")
+  NA_FILA    @map("na_fila")
+  EXPIRADA   @map("expirada")
+  CANCELADA  @map("cancelada")
+  ATENDIDA   @map("atendida")
+}
+
+enum NotificationType {
+  RESERVA_CONFIRMADA @map("reserva_confirmada")
+  LIVRO_DISPONIVEL   @map("livro_disponivel")
+  DEVOLUCAO_PROXIMA  @map("devolucao_proxima")
+  ATRASADO           @map("atrasado")
+  SUSPENSAO           @map("suspensao")
+  RESERVA_EXPIRADA   @map("reserva_expirada")
+  RENOVACAO          @map("renovacao")
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  matricula      String       @unique @db.VarChar(20)
-  nome           String       @db.VarChar(120)
-  email          String?      @unique @db.VarChar(150)
-  turma          String?      @db.VarChar(20)
-  senhaHash      String       @map("senha_hash") @db.VarChar(255)
-  tipo           UserType     @default(ALUNO)
-  ativo           Boolean      @default(true)
-  suspensoAte    DateTime?    @map("suspenso_ate") @db.Date
-  emprestimos    Loan[]       @relation("AlunoEmprestimos")
-  operacoes      Loan[]       @relation("BibliotecarioEmprestimos")
+  id             Int            @id @default(autoincrement())
+  matricula      String         @unique @db.VarChar(20)
+  nome           String         @db.VarChar(120)
+  email          String?        @unique @db.VarChar(150)
+  turma          String?        @db.VarChar(20)
+  senhaHash      String         @map("senha_hash") @db.VarChar(255)
+  tipo           UserType       @default(ALUNO)
+  ativo          Boolean        @default(true)
+  suspensoAte    DateTime?      @map("suspenso_ate") @db.Date
+  emprestimos    Loan[]         @relation("AlunoEmprestimos")
+  operacoes      Loan[]         @relation("BibliotecarioEmprestimos")
   reservas       Reservation[]
-  notifications Notification[]
-  createdAt      DateTime     @default(now()) @map("criado_em")
-  updatedAt      DateTime     @updatedAt @map("atualizado_em")
+  notifications  Notification[]
+  tokens         ApiToken[]
+  logs           AuditLog[]
+  createdAt      DateTime       @default(now()) @map("criado_em")
+  updatedAt      DateTime       @updatedAt @map("atualizado_em")
+  @@index([tipo, ativo])
   @@map("usuarios")
 }
 
 model Book {
-  id         Int      @id @default(autoincrement())
-  titulo     String   @db.VarChar(200)
-  autor      String   @db.VarChar(150)
-  isbn       String?  @db.VarChar(20)
-  editora    String?  @db.VarChar(100)
+  id         Int           @id @default(autoincrement())
+  titulo     String        @db.VarChar(200)
+  autor      String        @db.VarChar(150)
+  isbn       String?       @db.VarChar(20)
+  editora    String?       @db.VarChar(100)
   ano        Int?
-  categoria  String?  @db.VarChar(80)
+  categoria  String?       @db.VarChar(80)
   sinopse    String?
-  capa       String?  @db.VarChar(255)
+  capa       String?       @db.VarChar(255)
   copies     Copy[]
-  createdAt  DateTime @default(now()) @map("criado_em")
-  updatedAt  DateTime @updatedAt @map("atualizado_em")
+  reservas   Reservation[]
+  createdAt  DateTime      @default(now()) @map("criado_em")
+  updatedAt  DateTime      @updatedAt @map("atualizado_em")
   @@index([titulo])
   @@index([autor])
   @@index([categoria])
+  @@index([isbn])
   @@map("obras")
 }
 
 model Copy {
-  id          Int        @id @default(autoincrement())
-  obraId      Int        @map("obra_id")
-  tombo       String     @unique @db.VarChar(30)
-  status      CopyStatus @default(DISPONIVEL)
-  localizacao String?    @db.VarChar(80)
+  id          Int           @id @default(autoincrement())
+  obraId      Int           @map("obra_id")
+  tombo       String        @unique @db.VarChar(30)
+  status      CopyStatus    @default(DISPONIVEL)
+  localizacao String?       @db.VarChar(80)
   observacoes String?
-  book        Book       @relation(fields: [obraId], references: [id], onDelete: Cascade)
+  book        Book          @relation(fields: [obraId], references: [id], onDelete: Cascade)
   loans       Loan[]
   reservations Reservation[]
-  createdAt   DateTime   @default(now()) @map("criado_em")
-  updatedAt   DateTime   @updatedAt @map("atualizado_em")
+  createdAt   DateTime      @default(now()) @map("criado_em")
+  updatedAt   DateTime      @updatedAt @map("atualizado_em")
   @@index([obraId, status])
   @@map("exemplares")
 }
@@ -95,9 +110,11 @@ model Reservation {
   dataAtendimento DateTime?         @map("data_atendimento")
   observacoes     String?
   user            User              @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  book            Book              @relation(fields: [obraId], references: [id], onDelete: Cascade)
   copy            Copy?             @relation(fields: [exemplarId], references: [id], onDelete: SetNull)
   @@index([usuarioId, status])
   @@index([obraId, status])
+  @@index([exemplarId])
   @@map("reservas")
 }
 
@@ -118,21 +135,53 @@ model Loan {
   librarian             User      @relation("BibliotecarioEmprestimos", fields: [bibliotecarioId], references: [id], onDelete: Restrict)
   createdAt             DateTime  @default(now()) @map("criado_em")
   updatedAt             DateTime  @updatedAt @map("atualizado_em")
+  @@index([exemplarId])
   @@index([usuarioId, dataDevolucao])
   @@index([dataPrevistaDevolucao, dataDevolucao])
   @@map("emprestimos")
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  usuarioId Int      @map("usuario_id")
-  tipo      String   @db.VarChar(40)
-  titulo    String   @db.VarChar(150)
+  id        Int              @id @default(autoincrement())
+  usuarioId Int              @map("usuario_id")
+  tipo      NotificationType
+  titulo    String           @db.VarChar(150)
   mensagem  String
-  lida      Boolean  @default(false)
-  link      String?  @db.VarChar(255)
-  criadaEm  DateTime @default(now()) @map("criada_em")
-  user      User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  lida      Boolean          @default(false)
+  link      String?          @db.VarChar(255)
+  criadaEm  DateTime         @default(now()) @map("criada_em")
+  user      User             @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   @@index([usuarioId, lida])
   @@map("notificacoes")
+}
+
+model AuditLog {
+  id         BigInt    @id @default(autoincrement())
+  usuarioId  Int?      @map("usuario_id")
+  acao       String    @db.VarChar(80)
+  entidade   String?   @db.VarChar(50)
+  entidadeId Int?      @map("entidade_id")
+  detalhes   Json?
+  ip         String?   @db.VarChar(45)
+  userAgent  String?   @map("user_agent")
+  criadoEm   DateTime  @default(now()) @map("criado_em")
+  user       User?     @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  @@index([usuarioId, acao])
+  @@index([entidade, entidadeId])
+  @@index([criadoEm])
+  @@map("logs")
+}
+
+model ApiToken {
+  id         Int       @id @default(autoincrement())
+  usuarioId  Int       @map("usuario_id")
+  tokenHash  String    @unique @map("token_hash") @db.Char(64)
+  descricao  String?   @db.VarChar(120)
+  criadoEm   DateTime  @default(now()) @map("criado_em")
+  ultimoUso  DateTime? @map("ultimo_uso")
+  expiraEm   DateTime? @map("expira_em")
+  revogado   Boolean   @default(false)
+  user       User      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  @@index([usuarioId])
+  @@map("api_tokens")
 }
