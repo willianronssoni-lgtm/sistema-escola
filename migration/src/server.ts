@@ -13,6 +13,8 @@ const prisma = new PrismaClient();
 const port = Number(process.env.PORT ?? 3000);
 
 app.disable("x-powered-by");
+// Render encaminha as requisições por um proxy reverso.
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? false }));
 app.use(express.json({ limit: "1mb" }));
@@ -27,9 +29,26 @@ app.get("/api/v1/health", async (_req, res) => {
 });
 
 const loginSchema = z.object({
-  identificador: z.string().trim().min(1).max(150),
+  identificador: z.string().trim().min(1).max(150).optional(),
+  matricula: z.string().trim().min(1).max(20).optional(),
+  email: z.string().trim().email().max(150).optional(),
   senha: z.string().min(1).max(200)
+}).refine((data) => Boolean(data.identificador || data.matricula || data.email), {
+  message: "Informe e-mail escolar ou matrícula."
 });
+
+// O campo legado é DATE. Comparamos a data civil de São Paulo, sem deslocar
+// o dia por conversões de fuso horário do servidor.
+function alunoEstaSuspenso(suspensoAte: Date | null): boolean {
+  if (!suspensoAte) return false;
+  const hojeBrasil = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+  return suspensoAte.toISOString().slice(0, 10) >= hojeBrasil;
+}
 
 // Tokens aleatórios de 48 bytes; somente SHA-256 é persistido no banco.
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: "draft-8", legacyHeaders: false, message: { sucesso: false, erro: "Muitas tentativas. Aguarde alguns minutos e tente novamente." } });
@@ -61,8 +80,7 @@ const requireAuth: RequestHandler = async (req, res, next) => {
 
     if (
       token.user.tipo === "ALUNO" &&
-      token.user.suspensoAte !== null &&
-      token.user.suspensoAte >= new Date(new Date().toISOString().slice(0, 10))
+      alunoEstaSuspenso(token.user.suspensoAte)
     ) {
       res.status(403).json({ sucesso: false, erro: "Conta suspensa." });
       return;
@@ -91,9 +109,16 @@ app.post("/api/v1/auth/login", loginLimiter, async (req, res, next) => {
     const parsed = loginSchema.safeParse(req.body);
     if (!parsed.success) return res.status(422).json({ sucesso: false, erro: "Informe e-mail/matrícula e senha válidos." });
 
-    const { identificador, senha } = parsed.data;
+    const { senha } = parsed.data;
+    const identificador = (parsed.data.identificador ?? parsed.data.matricula ?? parsed.data.email ?? "").trim();
     const user = await prisma.user.findFirst({
-      where: { ativo: true, OR: [{ email: identificador }, { matricula: identificador }] }
+      where: {
+        ativo: true,
+        OR: [
+          { matricula: identificador },
+          { email: { equals: identificador, mode: "insensitive" } }
+        ]
+      }
     });
     if (!user) return res.status(401).json({ sucesso: false, erro: "E-mail escolar/matrícula ou senha inválidos." });
 
@@ -107,26 +132,27 @@ app.post("/api/v1/auth/login", loginLimiter, async (req, res, next) => {
       return res.status(401).json({ sucesso: false, erro: "E-mail escolar/matrícula ou senha inválidos." });
     }
 
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    if (user.tipo === "ALUNO" && user.suspensoAte && user.suspensoAte >= today) {
+    if (user.tipo === "ALUNO" && alunoEstaSuspenso(user.suspensoAte)) {
       return res.status(403).json({ sucesso: false, erro: "Sua conta está suspensa devido a atrasos na devolução." });
     }
 
     const rawToken = randomBytes(48).toString("hex");
     const tokenHash = createHash("sha256").update(rawToken).digest("hex");
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-    const token = await prisma.apiToken.create({
-      data: { usuarioId: user.id, tokenHash, descricao: "Sessão da API", expiraEm: expiresAt }
-    });
-    await prisma.auditLog.create({
-      data: { usuarioId: user.id, acao: "login", entidade: "usuarios", entidadeId: user.id }
+    const token = await prisma.$transaction(async (tx) => {
+      const createdToken = await tx.apiToken.create({
+        data: { usuarioId: user.id, tokenHash, descricao: "Sessão da API", expiraEm: expiresAt }
+      });
+      await tx.auditLog.create({
+        data: { usuarioId: user.id, acao: "login", entidade: "usuarios", entidadeId: user.id }
+      });
+      return createdToken;
     });
 
     return res.json({ sucesso: true, dados: {
       token: rawToken,
       expira_em: token.expiraEm,
-      usuario: { id: user.id, matricula: user.matricula, nome: user.nome, email: user.email, turma: user.turma, tipo: user.tipo }
+      usuario: { id: user.id, matricula: user.matricula, nome: user.nome, email: user.email, turma: user.turma, tipo: user.tipo.toLowerCase() }
     }});
   } catch (error) {
     return next(error);
@@ -151,7 +177,7 @@ app.get("/api/v1/auth/eu", requireAuth, async (_req, res) => {
   if (!user) {
     return res.status(401).json({ sucesso: false, erro: "Usuário não encontrado." });
   }
-  return res.json({ sucesso: true, dados: user });
+  return res.json({ sucesso: true, dados: { ...user, tipo: user.tipo.toLowerCase() } });
 });
 
 app.post("/api/v1/auth/logout", requireAuth, async (_req, res) => {
