@@ -1,40 +1,31 @@
 # Migração Node.js + TypeScript
 
-Esta pasta contém a nova aplicação em construção. Ela é isolada do PHP atual e não é publicada pelo serviço Render existente enquanto a branch `migration/node-typescript` não for integrada.
+Esta pasta contém a nova aplicação em construção, isolada do PHP atualmente publicado.
 
 ## Stack
-- Node.js + TypeScript + Express
-- Prisma ORM
-- PostgreSQL
-- React será adicionado para a nova interface após estabilizar a API.
+- API: Node.js + TypeScript + Express + Prisma + PostgreSQL.
+- Interface: React + TypeScript + Vite.
+- O frontend fica em `web/`; a API fica em `src/`.
 
 ## Desenvolvimento
 1. Instale Node.js 22 LTS.
-2. Entre nesta pasta: `cd migration`
-3. Copie `.env.example` para `.env` e configure uma URL PostgreSQL de teste.
-4. Instale: `npm install`
-5. Gere o cliente: `npm run prisma:generate`
-6. Valide o schema: `npm run prisma:validate`
-7. Execute: `npm run dev`
+2. Entre em `migration/` e instale as dependências da API: `npm install`.
+3. Instale as dependências web: `cd web && npm install`.
+4. Inicie a interface: `npm run dev` dentro de `web/`.
+5. Inicie a API em outro terminal: `npm run dev` na pasta `migration/`.
 
-A rota `GET /api/v1/health` verifica a API e a conexão PostgreSQL. Login permanece desativado (501) até que a migração dos hashes e regras de autenticação seja implementada e testada.
+## Interface nesta etapa
+A primeira tela React é uma prévia responsiva, com menu lateral recolhível, empréstimos em destaque, sete aparências, modo claro/escuro e layout mobile. Os indicadores ficam como traços até a API ser conectada; nenhum número fictício é apresentado como dado real.
 
 ## Segurança dos dados
-- **Atenção:** `../sql/schema.sql` é um script legado destrutivo: contém `DROP DATABASE` e recria o banco. Nunca o execute contra um banco que contenha dados que devam ser preservados.
-- Não aponta para o banco atual por padrão.
-- Não executar migrações contra o banco de produção.
-- Não importar dados reais até validar backup, mapeamento de IDs, hashes de senha, datas e integridade referencial.
-- O banco MySQL/PHP e o site atual devem continuar disponíveis durante a construção.
-- Não armazenar segredos no Git. Use variáveis de ambiente no serviço de teste.
+- **Atenção:** `../sql/schema.sql` contém `DROP DATABASE`. Nunca execute contra um banco existente.
+- Nenhum banco real é configurado por padrão; não importe dados reais até backup verificado e dry-run.
+- Não armazenar segredos no Git.
+- A versão PHP e seu banco permanecem independentes.
 
 ## Etapas pendentes
-- [ ] Validar o schema Prisma e gerar migrations PostgreSQL de teste.
-- [ ] Conferir a matriz de compatibilidade em `docs/LEGACY-MAPPING.md` antes de implementar endpoints.
-- [ ] Implementar autenticação segura, sessões/tokens, CSRF/CORS e permissões.
-- [ ] Migrar catálogo e pesquisa.
-- [ ] Migrar exemplares, empréstimos, devoluções, reservas e fila.
-- [ ] Migrar notificações e auditoria.
-- [ ] Criar frontend React responsivo preservando a identidade visual aprovada.
-- [ ] Criar testes automatizados e importar cópia anonimizada.
-- [ ] Testar deploy em serviço Render separado.
-- [ ] Planejar corte de produção somente após aprovação e backup verificado.
+- [ ] Integrar interface com endpoints reais e estados de carregamento/erro.
+- [ ] Implementar operações de empréstimo, devolução, reserva/fila e notificações.
+- [ ] Testes funcionais, acessibilidade e integração.
+- [ ] Build e deploy em serviço Render separado.
+- [ ] Aprovação antes de qualquer corte para produção.
