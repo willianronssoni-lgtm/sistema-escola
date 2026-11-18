@@ -20,6 +20,7 @@ Esta pasta contém a nova aplicação em construção. Ela é isolada do PHP atu
 A rota `GET /api/v1/health` verifica a API e a conexão PostgreSQL. Login permanece desativado (501) até que a migração dos hashes e regras de autenticação seja implementada e testada.
 
 ## Segurança dos dados
+- **Atenção:** `../sql/schema.sql` é um script legado destrutivo: contém `DROP DATABASE` e recria o banco. Nunca o execute contra um banco que contenha dados que devam ser preservados.
 - Não aponta para o banco atual por padrão.
 - Não executar migrações contra o banco de produção.
 - Não importar dados reais até validar backup, mapeamento de IDs, hashes de senha, datas e integridade referencial.
@@ -28,6 +29,7 @@ A rota `GET /api/v1/health` verifica a API e a conexão PostgreSQL. Login perman
 
 ## Etapas pendentes
 - [ ] Validar o schema Prisma e gerar migrations PostgreSQL de teste.
+- [ ] Conferir a matriz de compatibilidade em `docs/LEGACY-MAPPING.md` antes de implementar endpoints.
 - [ ] Implementar autenticação segura, sessões/tokens, CSRF/CORS e permissões.
 - [ ] Migrar catálogo e pesquisa.
 - [ ] Migrar exemplares, empréstimos, devoluções, reservas e fila.
