@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
+import bcrypt from "bcryptjs";
+import { rateLimit } from "express-rate-limit";
 import express, { type RequestHandler } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -25,12 +27,13 @@ app.get("/api/v1/health", async (_req, res) => {
 });
 
 const loginSchema = z.object({
-  matricula: z.string().trim().min(1).max(150),
+  identificador: z.string().trim().min(1).max(150),
   senha: z.string().min(1).max(200)
 });
 
-// A validação do token já segue o formato legado: o banco guarda somente SHA-256.
-// O login permanece fechado até confirmar compatibilidade dos hashes PHP existentes.
+// Tokens aleatórios de 48 bytes; somente SHA-256 é persistido no banco.
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: "draft-8", legacyHeaders: false, message: { sucesso: false, erro: "Muitas tentativas. Aguarde alguns minutos e tente novamente." } });
+
 const requireAuth: RequestHandler = async (req, res, next) => {
   try {
     const authorization = req.header("authorization") ?? "";
@@ -83,15 +86,51 @@ const requireAuth: RequestHandler = async (req, res, next) => {
   }
 };
 
-app.post("/api/v1/auth/login", (_req, res) => {
-  const parsed = loginSchema.safeParse(_req.body);
-  if (!parsed.success) {
-    return res.status(422).json({ sucesso: false, erro: "Informe e-mail/matrícula e senha válidos." });
+app.post("/api/v1/auth/login", loginLimiter, async (req, res, next) => {
+  try {
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(422).json({ sucesso: false, erro: "Informe e-mail/matrícula e senha válidos." });
+
+    const { identificador, senha } = parsed.data;
+    const user = await prisma.user.findFirst({
+      where: { ativo: true, OR: [{ email: identificador }, { matricula: identificador }] }
+    });
+    if (!user) return res.status(401).json({ sucesso: false, erro: "E-mail escolar/matrícula ou senha inválidos." });
+
+    // PHP PASSWORD_DEFAULT normalmente usa bcrypt ($2y$); não redefinimos senhas.
+    if (!/^\$2[aby]\$/.test(user.senhaHash)) {
+      console.error("Formato de hash legado não suportado para usuário", user.id);
+      return res.status(503).json({ sucesso: false, erro: "O formato de senha desta conta ainda precisa ser migrado com segurança." });
+    }
+    const compatibleHash = user.senhaHash.startsWith("$2y$") ? "$2b$" + user.senhaHash.slice(4) : user.senhaHash;
+    if (!(await bcrypt.compare(senha, compatibleHash))) {
+      return res.status(401).json({ sucesso: false, erro: "E-mail escolar/matrícula ou senha inválidos." });
+    }
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    if (user.tipo === "ALUNO" && user.suspensoAte && user.suspensoAte >= today) {
+      return res.status(403).json({ sucesso: false, erro: "Sua conta está suspensa devido a atrasos na devolução." });
+    }
+
+    const rawToken = randomBytes(48).toString("hex");
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const token = await prisma.apiToken.create({
+      data: { usuarioId: user.id, tokenHash, descricao: "Sessão da API", expiraEm: expiresAt }
+    });
+    await prisma.auditLog.create({
+      data: { usuarioId: user.id, acao: "login", entidade: "usuarios", entidadeId: user.id }
+    });
+
+    return res.json({ sucesso: true, dados: {
+      token: rawToken,
+      expira_em: token.expiraEm,
+      usuario: { id: user.id, matricula: user.matricula, nome: user.nome, email: user.email, turma: user.turma, tipo: user.tipo }
+    }});
+  } catch (error) {
+    return next(error);
   }
-  return res.status(501).json({
-    sucesso: false,
-    erro: "Login em migração: a compatibilidade dos hashes de senha ainda precisa ser validada."
-  });
 });
 
 app.get("/api/v1/auth/eu", requireAuth, async (_req, res) => {
