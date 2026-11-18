@@ -184,7 +184,8 @@ app.get("/api/v1/catalogo", requireAuth, async (req, res) => {
 });
 
 app.get("/api/v1/obras/:id", requireAuth, async (req, res) => {
-  const id = Number.parseInt(req.params.id, 10);
+  const idParam = req.params.id;
+  const id = Number.parseInt(typeof idParam === "string" ? idParam : idParam[0] ?? "", 10);
   if (!Number.isSafeInteger(id) || id <= 0) {
     return res.status(422).json({ sucesso: false, erro: "Identificador de obra inválido." });
   }
