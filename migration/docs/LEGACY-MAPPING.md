@@ -62,4 +62,4 @@ Este documento registra o que foi encontrado no código legado e o que precisa s
 
 ## Estado
 
-O schema Prisma inicial foi ampliado para refletir as oito tabelas principais. Ainda não há endpoints de negócio migrados, autenticação implementada, importação de dados ou testes de equivalência.
+O schema Prisma inicial foi ampliado para refletir as oito tabelas principais. A API já possui autenticação inicial com bcrypt para hashes compatíveis, tokens SHA-256, revogação, rate limit e consulta do usuário autenticado. A compatibilidade com formatos de hash diferentes de bcrypt ainda precisa ser investigada; os endpoints de empréstimos, reservas/fila e notificações, a interface React, a importação de dados e os testes de equivalência ainda não foram concluídos.
