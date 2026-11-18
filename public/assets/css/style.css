@@ -435,3 +435,19 @@ html[data-theme="dark"] .btn-secondary {
     --bs-btn-hover-bg: var(--be-primary-soft);
     --bs-btn-hover-border-color: var(--be-primary);
 }
+
+
+/* Prata claro: fundo quase branco, com leve tonalidade metálica */
+html:not([data-theme="dark"]) {
+    --be-bg: #EDEDED !important;
+    --bs-body-bg: #EDEDED !important;
+    background: #EDEDED !important;
+}
+html:not([data-theme="dark"]) body,
+html:not([data-theme="dark"]) body main,
+html:not([data-theme="dark"]) body main.container,
+html:not([data-theme="dark"]) body .container,
+html:not([data-theme="dark"]) body .container-fluid {
+    background: #EDEDED !important;
+    background-color: #EDEDED !important;
+}
