@@ -439,15 +439,15 @@ html[data-theme="dark"] .btn-secondary {
 
 /* Prata claro: fundo quase branco, com leve tonalidade metálica */
 html:not([data-theme="dark"]) {
-    --be-bg: #EDEDED !important;
-    --bs-body-bg: #EDEDED !important;
-    background: #EDEDED !important;
+    --be-bg: #F7F7F7 !important;
+    --bs-body-bg: #F7F7F7 !important;
+    background: #F7F7F7 !important;
 }
 html:not([data-theme="dark"]) body,
 html:not([data-theme="dark"]) body main,
 html:not([data-theme="dark"]) body main.container,
 html:not([data-theme="dark"]) body .container,
 html:not([data-theme="dark"]) body .container-fluid {
-    background: #EDEDED !important;
-    background-color: #EDEDED !important;
+    background: #F7F7F7 !important;
+    background-color: #F7F7F7 !important;
 }
