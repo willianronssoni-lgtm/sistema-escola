@@ -22,7 +22,6 @@ export default function App() {
   const [appearance, setAppearance] = useState<Appearance>(() => (localStorage.getItem("be-appearance") as Appearance) || "branco");
   const [collapsed, setCollapsed] = useState(false);
   const [active, setActive] = useState("inicio");
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
