@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ALUNO
+  BIBLIOTECARIO
+}
+
+enum CopyStatus {
+  DISPONIVEL
+  EMPRESTADO
+  RESERVADO
+  MANUTENCAO
+}
+
+enum ReservationStatus {
+  PENDENTE
+  CONFIRMADA
+  NA_FILA
+  EXPIRADA
+  CANCELADA
+  ATENDIDA
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  matricula      String       @unique @db.VarChar(20)
+  nome           String       @db.VarChar(120)
+  email          String?      @unique @db.VarChar(150)
+  turma          String?      @db.VarChar(20)
+  senhaHash      String       @map("senha_hash") @db.VarChar(255)
+  tipo           UserType     @default(ALUNO)
+  ativo           Boolean      @default(true)
+  suspensoAte    DateTime?    @map("suspenso_ate") @db.Date
+  emprestimos    Loan[]       @relation("AlunoEmprestimos")
+  operacoes      Loan[]       @relation("BibliotecarioEmprestimos")
+  reservas       Reservation[]
+  notifications Notification[]
+  createdAt      DateTime     @default(now()) @map("criado_em")
+  updatedAt      DateTime     @updatedAt @map("atualizado_em")
+  @@map("usuarios")
+}
+
+model Book {
+  id         Int      @id @default(autoincrement())
+  titulo     String   @db.VarChar(200)
+  autor      String   @db.VarChar(150)
+  isbn       String?  @db.VarChar(20)
+  editora    String?  @db.VarChar(100)
+  ano        Int?
+  categoria  String?  @db.VarChar(80)
+  sinopse    String?
+  capa       String?  @db.VarChar(255)
+  copies     Copy[]
+  createdAt  DateTime @default(now()) @map("criado_em")
+  updatedAt  DateTime @updatedAt @map("atualizado_em")
+  @@index([titulo])
+  @@index([autor])
+  @@index([categoria])
+  @@map("obras")
+}
+
+model Copy {
+  id          Int        @id @default(autoincrement())
+  obraId      Int        @map("obra_id")
+  tombo       String     @unique @db.VarChar(30)
+  status      CopyStatus @default(DISPONIVEL)
+  localizacao String?    @db.VarChar(80)
+  observacoes String?
+  book        Book       @relation(fields: [obraId], references: [id], onDelete: Cascade)
+  loans       Loan[]
+  reservations Reservation[]
+  createdAt   DateTime   @default(now()) @map("criado_em")
+  updatedAt   DateTime   @updatedAt @map("atualizado_em")
+  @@index([obraId, status])
+  @@map("exemplares")
+}
+
+model Reservation {
+  id              Int               @id @default(autoincrement())
+  usuarioId       Int               @map("usuario_id")
+  obraId          Int               @map("obra_id")
+  exemplarId      Int?              @map("exemplar_id")
+  status          ReservationStatus @default(PENDENTE)
+  posicaoFila     Int?              @map("posicao_fila")
+  dataReserva     DateTime          @default(now()) @map("data_reserva")
+  dataConfirmacao DateTime?         @map("data_confirmacao")
+  dataExpiracao   DateTime?         @map("data_expiracao")
+  dataAtendimento DateTime?         @map("data_atendimento")
+  observacoes     String?
+  user            User              @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  copy            Copy?             @relation(fields: [exemplarId], references: [id], onDelete: SetNull)
+  @@index([usuarioId, status])
+  @@index([obraId, status])
+  @@map("reservas")
+}
+
+model Loan {
+  id                    Int       @id @default(autoincrement())
+  exemplarId            Int       @map("exemplar_id")
+  usuarioId             Int       @map("usuario_id")
+  bibliotecarioId       Int       @map("bibliotecario_id")
+  dataRetirada          DateTime  @map("data_retirada") @db.Date
+  dataPrevistaDevolucao DateTime  @map("data_prevista_devolucao") @db.Date
+  dataDevolucao         DateTime? @map("data_devolucao") @db.Date
+  renovado              Boolean   @default(false)
+  diasAtraso            Int       @default(0) @map("dias_atraso")
+  suspensaoAplicada     Boolean   @default(false) @map("suspensao_aplicada")
+  observacoes           String?
+  copy                  Copy      @relation(fields: [exemplarId], references: [id], onDelete: Restrict)
+  user                  User      @relation("AlunoEmprestimos", fields: [usuarioId], references: [id], onDelete: Cascade)
+  librarian             User      @relation("BibliotecarioEmprestimos", fields: [bibliotecarioId], references: [id], onDelete: Restrict)
+  createdAt             DateTime  @default(now()) @map("criado_em")
+  updatedAt             DateTime  @updatedAt @map("atualizado_em")
+  @@index([usuarioId, dataDevolucao])
+  @@index([dataPrevistaDevolucao, dataDevolucao])
+  @@map("emprestimos")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @map("usuario_id")
+  tipo      String   @db.VarChar(40)
+  titulo    String   @db.VarChar(150)
+  mensagem  String
+  lida      Boolean  @default(false)
+  link      String?  @db.VarChar(255)
+  criadaEm  DateTime @default(now()) @map("criada_em")
+  user      User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  @@index([usuarioId, lida])
+  @@map("notificacoes")
+}
