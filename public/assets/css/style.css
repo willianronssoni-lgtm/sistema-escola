@@ -451,3 +451,45 @@ html:not([data-theme="dark"]) body .container-fluid {
     background: #F7F7F7 !important;
     background-color: #F7F7F7 !important;
 }
+
+
+/* Cenários pixel art da biblioteca na tela de login */
+.login-visual {
+    background-image:
+        linear-gradient(180deg, rgba(245,247,250,.10), rgba(226,232,239,.22)),
+        url('../images/login-library-light.svg');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+}
+.login-visual:before {
+    opacity: .18;
+    background-image: repeating-linear-gradient(90deg, transparent 0 30px, rgba(255,255,255,.12) 31px 32px),
+                      repeating-linear-gradient(0deg, transparent 0 30px, rgba(255,255,255,.08) 31px 32px);
+}
+.login-library-glow {
+    background: color-mix(in srgb, var(--be-primary) 24%, transparent);
+}
+html[data-theme="dark"] .login-visual {
+    background-image:
+        linear-gradient(180deg, rgba(15,17,33,.18), rgba(15,17,33,.36)),
+        url('../images/login-library-dark.svg');
+    background-size: cover;
+    background-position: center;
+}
+html[data-theme="dark"] .login-visual:before { opacity: .3; }
+.login-panel { background: var(--be-surface); }
+.login-brand-icon, .login-mark {
+    background: var(--be-primary-soft);
+    color: var(--be-primary-strong);
+}
+.login-mark { color: var(--be-primary-strong); }
+.login-input-wrap > i { color: var(--be-primary-strong); }
+.login-submit { background: var(--be-primary-strong); border-color: var(--be-primary-strong); }
+.login-submit:hover, .login-submit:focus {
+    background: var(--be-primary);
+    border-color: var(--be-primary);
+}
+@media (max-width: 767.98px) {
+    .login-visual { background-position: center 44%; }
+}
