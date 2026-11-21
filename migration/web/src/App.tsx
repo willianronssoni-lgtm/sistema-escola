@@ -96,11 +96,11 @@ export default function App() {
   }
 
   const activeLabel = nav.flatMap(group => group.items).find(item => item.id === active)?.label ?? "Início";
-  return <div className={\`app-shell \${collapsed ? "sidebar-collapsed" : ""}\`}>
+  return <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
     <aside className="sidebar">
       <div className="brand"><div className="brand-mark">B</div><div className="brand-copy"><strong>Biblioteca</strong><span>ESCOLAR</span></div><button className="collapse-btn" onClick={() => setCollapsed(!collapsed)} aria-label="Recolher menu">‹</button></div>
       <div className="sidebar-label">MENU PRINCIPAL</div>
-      {nav.map(group => <section className="nav-group" key={group.group}><div className="group-title">{group.group}</div>{group.items.map(item => <button key={item.id} className={\`nav-item \${active === item.id ? "selected" : ""}\`} onClick={() => { setActive(item.id); if (item.id === "catalogo" && token) void loadCatalog(); }} title={item.label}><span className="nav-icon">{item.icon}</span><span className="nav-text">{item.label}</span>{item.id === "emprestimos" && <span className="nav-dot" />}</button>)}</section>)}
+      {nav.map(group => <section className="nav-group" key={group.group}><div className="group-title">{group.group}</div>{group.items.map(item => <button key={item.id} className={`nav-item ${active === item.id ? "selected" : ""}`} onClick={() => { setActive(item.id); if (item.id === "catalogo" && token) void loadCatalog(); }} title={item.label}><span className="nav-icon">{item.icon}</span><span className="nav-text">{item.label}</span>{item.id === "emprestimos" && <span className="nav-dot" />}</button>)}</section>)}
       <div className="sidebar-bottom"><div className="help-card"><span className="help-icon">?</span><strong>Precisa de ajuda?</strong><small>Acesse o suporte do sistema.</small></div><div className="profile"><div className="avatar">BE</div><div className="profile-copy"><strong>{user?.nome || "Visitante"}</strong><small>{user ? user.tipo : "Não conectado"}</small></div><span className="profile-more">···</span></div></div>
     </aside>
     <main className="main-area">
