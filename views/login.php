@@ -11,28 +11,34 @@ $identificador = $identificador ?? '';
             <span class="lamp-shade"></span><span class="lamp-arm"></span><span class="lamp-base"></span><span class="lamp-light"></span>
         </div>
         <div class="login-book-wrap" aria-hidden="true">
-            <svg class="login-open-book" viewBox="0 0 760 420" role="img" aria-label="Livro aberto com páginas iluminadas">
+            <svg class="login-open-book" viewBox="0 0 760 420" role="img" aria-label="Livro aberto moderno com páginas douradas e capa elegante">
                 <defs>
-                    <linearGradient id="pageLeft" x1="0" y1="0" x2="0.8" y2="1"><stop offset="0" stop-color="#fffef9"/><stop offset=".72" stop-color="#f1e8d7"/><stop offset="1" stop-color="#d8c9ad"/></linearGradient>
-                    <linearGradient id="pageRight" x1=".2" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffef9"/><stop offset=".72" stop-color="#f3ead9"/><stop offset="1" stop-color="#d5c4a5"/></linearGradient>
-                    <linearGradient id="cover" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--book-color)"/><stop offset="1" stop-color="var(--book-color-deep)"/></linearGradient>
-                    <linearGradient id="spine" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#241b32"/><stop offset=".5" stop-color="var(--book-color-deep)"/><stop offset="1" stop-color="#241b32"/></linearGradient>
-                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="13"/></filter>
+                    <linearGradient id="newBookCover" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--book-color)"/><stop offset="1" stop-color="var(--book-color-deep)"/></linearGradient>
+                    <linearGradient id="newBookPages" x1="0" y1="0" x2="0.2" y2="1"><stop offset="0" stop-color="#fffef8"/><stop offset=".72" stop-color="#f5ead2"/><stop offset="1" stop-color="#d8c49d"/></linearGradient>
+                    <linearGradient id="newBookGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0bd"/><stop offset="1" stop-color="#c99b4b"/></linearGradient>
+                    <filter id="newBookShadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="12"/></filter>
                 </defs>
-                <ellipse cx="380" cy="360" rx="300" ry="25" fill="#000" opacity=".42" filter="url(#shadow)"/>
-                <path d="M66 270 Q208 220 374 286 Q548 220 694 270 L678 344 Q530 300 380 370 Q225 300 82 344Z" fill="url(#cover)" stroke="#171321" stroke-width="8" stroke-linejoin="round"/>
-                <path d="M78 252 Q220 188 376 267 L376 326 Q222 258 78 310Z" fill="#c9b99b" opacity=".65"/>
-                <path d="M384 267 Q540 188 682 252 L682 310 Q538 258 384 326Z" fill="#b9a887" opacity=".65"/>
-                <path d="M78 240 Q218 176 376 254 Q536 176 682 240 L682 300 Q536 244 380 326 Q222 244 78 300Z" fill="url(#pageLeft)" stroke="#b7a88d" stroke-width="4"/>
-                <path d="M380 254 Q536 176 682 240 L682 300 Q536 244 380 326Z" fill="url(#pageRight)" stroke="#b7a88d" stroke-width="4"/>
-                <path d="M380 254 Q373 288 380 326" fill="none" stroke="url(#spine)" stroke-width="10"/>
-                <path d="M84 300 Q225 244 376 326 M384 326 Q536 244 676 300" fill="none" stroke="#8f7d60" stroke-width="3" opacity=".7"/>
-                <g fill="none" stroke="#b7aa91" stroke-width="3.5" stroke-linecap="round" opacity=".82">
-                    <path d="M128 238 Q238 196 340 254 M128 254 Q238 212 340 270 M128 270 Q238 228 340 286 M128 286 Q238 244 340 302"/>
-                    <path d="M420 254 Q522 196 632 238 M420 270 Q522 212 632 254 M420 286 Q522 228 632 270 M420 302 Q522 244 632 286"/>
+                <ellipse cx="380" cy="350" rx="270" ry="28" fill="#000" opacity=".38" filter="url(#newBookShadow)"/>
+                <g opacity=".9" fill="none" stroke="url(#newBookGold)" stroke-width="4" stroke-linecap="round">
+                    <path d="M145 112l8-17 8 17 17 8-17 8-8 17-8-17-17-8z"/>
+                    <path d="M600 92l5-11 5 11 11 5-11 5-5 11-5-11-11-5z"/>
+                    <path d="M535 150l4-9 4 9 9 4-9 4-4 9-4-9-9-4z"/>
                 </g>
-                <path d="M80 240 Q220 177 376 254 Q536 177 680 240" fill="none" stroke="#fff9e9" stroke-width="5" opacity=".8"/>
-            </svg>       </div>
+                <path d="M105 260 Q232 205 375 274 Q520 205 655 260 L638 335 Q510 292 380 362 Q245 292 122 335Z" fill="url(#newBookCover)" stroke="#171321" stroke-width="8" stroke-linejoin="round"/>
+                <path d="M122 245 Q248 186 375 254 L375 322 Q245 267 122 310Z" fill="#b99b65" opacity=".75"/>
+                <path d="M385 254 Q520 186 638 245 L638 310 Q510 267 385 322Z" fill="#a98b58" opacity=".75"/>
+                <path d="M112 225 Q245 160 375 238 Q515 160 648 225 L638 294 Q510 240 380 322 Q245 240 122 294Z" fill="url(#newBookPages)" stroke="#d4c19a" stroke-width="4"/>
+                <path d="M380 238 Q515 160 648 225 L638 294 Q510 240 380 322Z" fill="url(#newBookPages)" stroke="#d4c19a" stroke-width="4"/>
+                <path d="M380 238 Q372 280 380 322" fill="none" stroke="#8d6b3c" stroke-width="9"/>
+                <g fill="none" stroke="#c4b28f" stroke-width="3" stroke-linecap="round" opacity=".9">
+                    <path d="M160 226 Q250 187 342 244 M154 244 Q250 205 342 262 M150 262 Q250 223 342 280"/>
+                    <path d="M418 244 Q510 187 600 226 M418 262 Q510 205 606 244 M418 280 Q510 223 610 262"/>
+                </g>
+                <path d="M112 225 Q245 160 375 238 Q515 160 648 225" fill="none" stroke="#fffdf4" stroke-width="6" opacity=".9"/>
+                <path d="M380 322 Q510 240 638 294" fill="none" stroke="#8b7049" stroke-width="3" opacity=".65"/>
+                <path d="M122 294 Q245 240 375 322" fill="none" stroke="#8b7049" stroke-width="3" opacity=".65"/>
+                <path d="M380 330v24" stroke="url(#newBookGold)" stroke-width="5" stroke-linecap="round"/>
+            </svg>      </svg>       </div>
         <div class="login-visual-caption"><span class="login-mark"><i class="bi bi-book-half"></i></span><span>Conhecimento que inspira</span></div>
     </div>
     <div class="login-panel">
