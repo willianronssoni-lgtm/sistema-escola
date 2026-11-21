@@ -493,3 +493,7 @@ html[data-theme="dark"] .login-visual:before { opacity: .3; }
 @media (max-width: 767.98px) {
     .login-visual { background-position: center 44%; }
 }
+
+
+/* O livro principal agora faz parte do novo cenário pixel art; evita duplicação */
+.login-book-wrap { display: none !important; }
