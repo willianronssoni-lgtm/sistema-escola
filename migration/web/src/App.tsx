@@ -110,7 +110,21 @@ export default function App() {
         {!API_URL && <div className="demo-notice"><span>ⓘ</span><span>Frontend preparado, mas a API ainda não foi configurada. Defina VITE_API_URL para habilitar login e catálogo.</span></div>}
         {error && <div className="form-alert error-alert" role="alert">{error}</div>}
         {notice && <div className="form-alert notice-alert" role="status">{notice}</div>}
-        {active === "login" && <section className="auth-card"><div><h2>Entrar na Biblioteca</h2><p>Use sua matrícula ou e-mail escolar e sua senha.</p></div><form onSubmit={handleLogin} className="auth-form"><label>Matrícula ou e-mail<input autoComplete="username" value={identifier} onChange={e => setIdentifier(e.target.value)} required placeholder="Digite sua matrícula ou e-mail" /></label><label>Senha<input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Digite sua senha" /></label><button className="btn btn-primary" disabled={loginBusy}>{loginBusy ? "Entrando..." : "Entrar"}</button></form></section>}
+        {active === "login" && <section className="login-scene">
+          <div className="login-art" aria-hidden="true"><img src="/login-book-pixel.svg" alt="" /></div>
+          <div className="login-panel">
+            <div className="login-brandline"><span className="brand-mark">B</span><span>Biblioteca Escolar</span></div>
+            <div className="login-kicker">SEU ESPAÇO DE LEITURA</div>
+            <h2>Bem-vindo de volta</h2>
+            <p className="login-description">Acesse sua conta para explorar o acervo e acompanhar suas atividades.</p>
+            <form onSubmit={handleLogin} className="auth-form">
+              <label>Matrícula ou e-mail<input autoComplete="username" value={identifier} onChange={e => setIdentifier(e.target.value)} required placeholder="Digite sua matrícula ou e-mail" /></label>
+              <label>Senha<input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Digite sua senha" /></label>
+              <button className="btn btn-primary" disabled={loginBusy}>{loginBusy ? "Entrando..." : "Entrar"}</button>
+            </form>
+            <div className="login-caption">Conhecimento que abre caminhos.</div>
+          </div>
+        </section>}
         {active === "catalogo" && <section className="catalog-card"><div className="catalog-search"><input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => { if (e.key === "Enter") void loadCatalog(); }} placeholder="Buscar por título, autor ou ISBN" aria-label="Buscar livros" /><button className="btn btn-primary" onClick={() => void loadCatalog()} disabled={catalogBusy}>{catalogBusy ? "Buscando..." : "Buscar"}</button></div>{books.length > 0 && <div className="book-list">{books.map(book => <article className="book-row" key={book.id}><div className="book-cover">▤</div><div className="book-info"><strong>{book.titulo}</strong><span>{book.autor}</span><small>{book.categoria || "Sem categoria"} · {book.disponiveis} de {book.total_exemplares} disponíveis</small></div><span className={book.disponiveis ? "availability available" : "availability unavailable"}>{book.disponiveis ? "Disponível" : "Indisponível"}</span></article>)}</div>}{!books.length && !catalogBusy && <div className="catalog-empty">Entre na sua conta e faça uma busca para consultar o acervo.</div>}</section>}
         {active !== "login" && active !== "catalogo" && <><section className="stats-grid">
           <article className="stat-card"><div className="stat-top"><span>Empréstimos ativos</span><span className="stat-icon purple">⇄</span></div><strong>—</strong><small>Indicador será integrado à API</small></article>
