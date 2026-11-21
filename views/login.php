@@ -38,7 +38,8 @@ $identificador = $identificador ?? '';
                 <path d="M380 322 Q510 240 638 294" fill="none" stroke="#8b7049" stroke-width="3" opacity=".65"/>
                 <path d="M122 294 Q245 240 375 322" fill="none" stroke="#8b7049" stroke-width="3" opacity=".65"/>
                 <path d="M380 330v24" stroke="url(#newBookGold)" stroke-width="5" stroke-linecap="round"/>
-            </svg>      </svg>       </div>
+            </svg>
+        </div>
         <div class="login-visual-caption"><span class="login-mark"><i class="bi bi-book-half"></i></span><span>Conhecimento que inspira</span></div>
     </div>
     <div class="login-panel">
