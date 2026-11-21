@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+<defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#9ab4e8" stroke-opacity=".18" stroke-width="2"/></pattern><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#171b32"/><stop offset="1" stop-color="#28243c"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#wall)"/><rect y="610" width="1200" height="290" fill="#171a2c"/><rect y="600" width="1200" height="18" fill="#5d5577"/>
+<rect x="90" y="100" width="300" height="400" fill="#252d49" stroke="#71668f" stroke-width="18"/><rect x="120" y="130" width="240" height="340" fill="#303b5c"/><path d="M240 130V470M120 300H360" stroke="#8996bb" stroke-width="14"/>
+<g stroke="#776d91" stroke-width="10"><path d="M470 130H1090V170H470zM470 320H1090V360H470zM470 510H1090V550H470z"/></g>
+<g><path fill="#8068a8" d="M500 170h55v-115h-55z"/><path fill="#b18a55" d="M565 170h42V75h-42z"/><path fill="#647da8" d="M620 170h70V45h-70z"/><path fill="#a87f4f" d="M705 170h48V90h-48z"/><path fill="#71629b" d="M770 170h62V60h-62z"/><path fill="#b18a55" d="M850 170h45V100h-45z"/><path fill="#5d78a4" d="M910 170h72V50h-72z"/><path fill="#a98454" d="M995 170h55V85h-55z"/></g>
+<g><path fill="#b18a55" d="M500 360h48v-130h-48z"/><path fill="#647da8" d="M560 360h68V215h-68z"/><path fill="#a98454" d="M640 360h50v-95h-50z"/><path fill="#71629b" d="M705 360h60V205h-60z"/><path fill="#b18a55" d="M780 360h48v-120h-48z"/><path fill="#647da8" d="M840 360h70V205h-70z"/><path fill="#a98454" d="M925 360h48v-95h-48z"/><path fill="#71629b" d="M990 360h60V220h-60z"/></g>
+<g><path fill="#647da8" d="M500 550h60v-130h-60z"/><path fill="#b18a55" d="M575 550h45v-95h-45z"/><path fill="#71629b" d="M635 550h72V405h-72z"/><path fill="#a98454" d="M720 550h50v-120h-50z"/><path fill="#647da8" d="M785 550h65V400h-65z"/><path fill="#b18a55" d="M865 550h48v-100h-48z"/><path fill="#71629b" d="M930 550h70V405h-70z"/></g>
+<g fill="#f4ce88" opacity=".8"><path d="M160 80l8-20 8 20 20 8-20 8-8 20-8-20-20-8z"/><path d="M1060 230l6-15 6 15 15 6-15 6-6 15-6-15-15-6z"/><circle cx="430" cy="180" r="5"/><circle cx="1110" cy="470" r="6"/></g>
+<rect width="1200" height="900" fill="url(#grid)"/>
+</svg>
