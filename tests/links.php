@@ -14,8 +14,8 @@ $repo = dirname(__DIR__);
 $public = $repo . '/public';
 
 $arquivos = array_merge(
-    glob($repo . '/views/*.php') ?: [],
-    glob($repo . '/views/partials/*.php') ?: [],
+    glob($repo . '/front/views/*.php') ?: [],
+    glob($repo . '/front/views/partials/*.php') ?: [],
     glob($repo . '/public/*.php') ?: []
 );
 
