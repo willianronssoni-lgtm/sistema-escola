@@ -134,16 +134,18 @@ Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) e a documentação da A
 
 ## Estrutura do projeto (Back-end e Front-end)
 
-O código foi separado em duas áreas principais:
+O código da aplicação está organizado em duas pastas principais:
 
-- **[Back-end](back/)** — lógica do servidor, autenticação, configuração, banco de dados, serviços e API PHP.
-  - [Aplicação e serviços](back/app/)
-- **[Front-end](front/)** — templates PHP responsáveis pela apresentação das telas.
-  - [Views e componentes](front/views/)
-- **[Arquivos públicos da interface](public/assets/)** — CSS, JavaScript e imagens servidos diretamente pelo Apache.
-- **[Pontos de entrada web](public/)** — rotas PHP públicas mantidas nessa pasta porque ela continua sendo a raiz pública do Apache. Esses arquivos encaminham as requisições para o back-end e renderizam as views do front-end.
+- **[Back-end](back/)** — toda a lógica PHP do servidor: configuração, banco de dados, autenticação, serviços, API e controladores das páginas.
+  - [Aplicação](back/app/)
+  - [Controladores e endpoints](back/controllers/)
+- **[Front-end](front/)** — telas, componentes, estilos, scripts e imagens.
+  - [Views](front/views/)
+  - [Assets (CSS, JavaScript e imagens)](front/assets/)
 
-Essa organização mantém a URL pública e os caminhos de execução atuais. Os arquivos de assets permanecem em `public/assets/` para continuarem acessíveis pelo navegador sem alterar as URLs da aplicação.
+A pasta `public/` contém somente os pontos de entrada HTTP necessários ao Apache. Eles encaminham as requisições para os controladores em `back/controllers/`. O Apache publica os arquivos de `front/assets/` pelo endereço `/assets`, sem duplicar os arquivos no diretório público.
+
+Os arquivos SQL e de documentação continuam em `sql/` e `docs/`, pois não são código de interface nem lógica executável do servidor.
 
 ## Publicação de teste no Railway
 

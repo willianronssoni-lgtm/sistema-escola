@@ -42,7 +42,7 @@ $falhas = [];
 foreach (array_keys($alvos) as $destino) {
     if (str_contains($destino, '/')) {
         // Caminhos com barra (por exemplo assets/css/style.css) são estáticos.
-        $caminho = $public . '/' . ltrim($destino, '/');
+        $caminho = $repo . '/front/' . ltrim($destino, '/');
         if (!file_exists($caminho)) {
             $falhas[] = $destino;
         }
