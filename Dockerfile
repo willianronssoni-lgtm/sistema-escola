@@ -13,7 +13,7 @@ RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
     && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's#<Directory /var/www/html>#<Directory /var/www/html/public>#' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's#AllowOverride None#AllowOverride All#' /etc/apache2/apache2.conf \
-    && printf '%s\\n' 'Alias /assets /var/www/html/front/assets' '<Directory /var/www/html/front/assets>' '    Options -Indexes' '    AllowOverride None' '    Require all granted' '</Directory>' > /etc/apache2/conf-available/front-assets.conf \
+    && printf '%s\n' 'Alias /assets /var/www/html/front/assets' '<Directory /var/www/html/front/assets>' '    Options -Indexes' '    AllowOverride None' '    Require all granted' '</Directory>' > /etc/apache2/conf-available/front-assets.conf \
     && a2enconf front-assets
 
 COPY . /var/www/html/

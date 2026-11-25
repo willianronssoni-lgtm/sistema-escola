@@ -44,7 +44,7 @@ Sistema web em PHP e MySQL para catálogo, reservas, fila de espera, renovação
 
 Teste local rápido:
 ```bash
-php -S 127.0.0.1:8000 -t public
+php -S 127.0.0.1:8000 -t public public/router.php
 ```
 Ajuste `APP_URL=http://127.0.0.1:8000` nesse cenário.
 
