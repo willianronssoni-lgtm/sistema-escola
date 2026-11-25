@@ -15,6 +15,6 @@ jobs:
           php-version: '8.2'
           coverage: none
       - name: Verificar sintaxe PHP
-        run: find app public views tests -name '*.php' -print0 | xargs -0 -n1 php -l
+        run: find back/app front/views public tests -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Executar testes unitários
         run: php tests/run.php

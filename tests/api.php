@@ -35,7 +35,7 @@ putenv("DB_USER={$user}");
 putenv("DB_PASS={$pass}");
 putenv('DEBUG=0');
 
-require_once $repo . '/app/config/config.php';
+require_once $repo . '/back/app/config/config.php';
 
 $db = db();
 $passed = 0;

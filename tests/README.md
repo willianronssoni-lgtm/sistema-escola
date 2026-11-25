@@ -13,7 +13,7 @@ php tests/run.php
 Para verificar a sintaxe dos arquivos PHP:
 
 ```bash
-find app public views tests -name '*.php' -print0 | xargs -0 -n1 php -l
+find back/app front/views public tests -name '*.php' -print0 | xargs -0 -n1 php -l
 ```
 
 O workflow **Testes PHP** executa essas verificações em cada push e pull request.

@@ -8,7 +8,7 @@ declare(strict_types=1);
 session_start();
 define('MAX_EMPRESTIMOS_SIMULTANEOS', 3);
 define('APP_URL', getenv('APP_URL') ?: 'http://localhost/biblioteca/public');
-require_once __DIR__ . '/../app/helpers/functions.php';
+require_once __DIR__ . '/../back/app/helpers/functions.php';
 
 $passed = 0;
 $failed = 0;
