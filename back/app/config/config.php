@@ -1,0 +1,54 @@
+<?php
+/**
+ * Configurações gerais do sistema.
+ * O backend foi organizado em back/app e as views em front/views.
+ */
+declare(strict_types=1);
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+if (session_status() === PHP_SESSION_NONE) {
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $forwardedProto === 'https' || (($_SERVER['SERVER_PORT'] ?? null) == 443);
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure', $https ? '1' : '0');
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+    session_start();
+}
+define('APP_NAME', getenv('APP_NAME') ?: 'Biblioteca Escolar');
+define('APP_VERSION', '1.0.0');
+$appUrl = getenv('APP_URL');
+if (!$appUrl) {
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    if (!preg_match('/^[a-z0-9.-]+(?::[0-9]{1,5})?$/i', $host)) $host = 'localhost';
+    $forwardedProto = strtolower(trim(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $forwardedProto === 'https' || (($_SERVER['SERVER_PORT'] ?? null) == 443);
+    $appUrl = ($https ? 'https://' : 'http://') . $host;
+}
+define('APP_URL', rtrim($appUrl, '/'));
+define('PRAZO_EMPRESTIMO_DIAS', 15);
+define('PRAZO_RENOVACAO_DIAS', 15);
+define('MAX_RENOVACOES', 1);
+define('PRAZO_RESERVA_HORAS', 48);
+define('MAX_EMPRESTIMOS_SIMULTANEOS', 3);
+define('BASE_PATH', dirname(__DIR__, 3));
+define('APP_PATH', BASE_PATH . '/back/app');
+define('VIEWS_PATH', BASE_PATH . '/front/views');
+define('UPLOADS_PATH', BASE_PATH . '/uploads');
+define('CAPAS_PATH', UPLOADS_PATH . '/capas');
+define('SQL_PATH', BASE_PATH . '/sql');
+define('MAX_FILE_SIZE', 2 * 1024 * 1024);
+define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'webp']);
+define('DEBUG', filter_var(getenv('DEBUG') ?: '0', FILTER_VALIDATE_BOOLEAN));
+date_default_timezone_set(getenv('APP_TIMEZONE') ?: 'America/Sao_Paulo');
+require_once APP_PATH . '/config/database.php';
+require_once APP_PATH . '/helpers/functions.php';
+require_once APP_PATH . '/helpers/view.php';
+require_once APP_PATH . '/auth/auth.php';
+require_once APP_PATH . '/services/emprestimo.php';
+require_once APP_PATH . '/services/reserva.php';
+require_once APP_PATH . '/api/http.php';
+require_once APP_PATH . '/api/auth.php';
+require_once APP_PATH . '/api/router.php';

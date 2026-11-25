@@ -132,6 +132,19 @@ Veja o documento [PLANEJAMENTO.md](docs/PLANEJAMENTO.md) e a documentação da A
 - quais tecnologias e estrutura serão utilizadas;
 - as etapas de desenvolvimento e os critérios de conclusão.
 
+## Estrutura do projeto (Back-end e Front-end)
+
+O código foi separado em duas áreas principais:
+
+- **[Back-end](back/)** — lógica do servidor, autenticação, configuração, banco de dados, serviços e API PHP.
+  - [Aplicação e serviços](back/app/)
+- **[Front-end](front/)** — templates PHP responsáveis pela apresentação das telas.
+  - [Views e componentes](front/views/)
+- **[Arquivos públicos da interface](public/assets/)** — CSS, JavaScript e imagens servidos diretamente pelo Apache.
+- **[Pontos de entrada web](public/)** — rotas PHP públicas mantidas nessa pasta porque ela continua sendo a raiz pública do Apache. Esses arquivos encaminham as requisições para o back-end e renderizam as views do front-end.
+
+Essa organização mantém a URL pública e os caminhos de execução atuais. Os arquivos de assets permanecem em `public/assets/` para continuarem acessíveis pelo navegador sem alterar as URLs da aplicação.
+
 ## Publicação de teste no Railway
 
 O repositório inclui `Dockerfile` e `railway.json` para executar PHP/Apache no Railway.
