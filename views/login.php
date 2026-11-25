@@ -4,7 +4,7 @@ $erro = $erro ?? '';
 $identificador = $identificador ?? '';
 ?>
 
-<link rel="stylesheet" href="<?= url('assets/css/login-screen.css') ?>?v=3">
+<link rel="stylesheet" href="<?= url('assets/css/login-screen.css') ?>?v=4">
 
 <section class="login-screen login-screen-photo" aria-label="Acesso à Biblioteca Escolar">
     <div class="login-backdrop" aria-hidden="true"></div>
