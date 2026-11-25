@@ -78,3 +78,16 @@ html[data-theme="dark"] .login-screen-photo { background-image: url("../images/l
     .login-footnote { font-size: .78rem; gap: .55rem; }
 }
 @media (prefers-reduced-motion: reduce) { .login-submit, .login-field { transition: none; } }
+
+/* Fundo pixel art para a tela de login */
+.login-screen-photo {
+    background-image: url("../images/login-library-pixel.svg");
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+}
+html[data-theme="dark"] .login-screen-photo {
+    background-image: linear-gradient(rgba(12,10,22,.18),rgba(12,10,22,.28)), url("../images/login-library-pixel.svg");
+    background-size: cover;
+    background-position: center;
+}
