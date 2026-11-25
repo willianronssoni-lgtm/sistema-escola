@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/../app/config/config.php';
 
+// A página inicial sempre exige autenticação: visitantes vão primeiro ao login.
+if (!usuario_logado()) {
+    redirect(url('login.php'));
+}
+
+
 $estatisticas = [];
 try {
     $db = db();
