@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#30243f"/><stop offset="1" stop-color="#171525"/></linearGradient>
+ <linearGradient id="sun" x2="0" y2="1"><stop stop-color="#ffe5a0" stop-opacity=".9"/><stop offset="1" stop-color="#d88d4a" stop-opacity=".08"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#463044"/><stop offset="1" stop-color="#171525"/></linearGradient>
+ <pattern id="pixel" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0h8v8H0z" fill="#fff" opacity=".018"/></pattern>
+ <pattern id="books" width="82" height="112" patternUnits="userSpaceOnUse">
+  <rect x="4" y="10" width="15" height="85" fill="#3f3158"/><rect x="7" y="14" width="3" height="78" fill="#a66cbb"/>
+  <rect x="22" y="4" width="18" height="91" fill="#68405b"/><rect x="26" y="11" width="3" height="78" fill="#d69a62"/>
+  <rect x="43" y="15" width="14" height="80" fill="#293e5d"/><rect x="46" y="19" width="3" height="70" fill="#8c9bc4"/>
+  <rect x="60" y="8" width="17" height="87" fill="#7b4d38"/><rect x="64" y="13" width="3" height="76" fill="#e3b36f"/>
+  <path d="M7 25h9M26 28h10M46 34h8M64 30h10" stroke="#e8c78b" stroke-width="3"/>
+ </pattern>
+</defs>
+<!-- library walls -->
+<rect width="1600" height="1000" fill="url(#wall)"/>
+<rect x="0" y="0" width="510" height="770" fill="#241c30"/>
+<rect x="0" y="0" width="510" height="690" fill="url(#books)"/>
+<g fill="#9a6949"><rect x="0" y="0" width="510" height="18"/><rect x="0" y="218" width="510" height="20"/><rect x="0" y="442" width="510" height="20"/><rect x="0" y="666" width="510" height="22"/></g>
+<g fill="#38243b"><rect x="0" y="18" width="18" height="650"/><rect x="492" y="18" width="18" height="650"/></g>
+<!-- right shelves -->
+<rect x="1280" y="0" width="320" height="790" fill="#261d2c"/>
+<rect x="1300" y="0" width="300" height="710" fill="url(#books)"/>
+<g fill="#a16c48"><rect x="1280" y="0" width="320" height="18"/><rect x="1280" y="220" width="320" height="20"/><rect x="1280" y="448" width="320" height="20"/><rect x="1280" y="676" width="320" height="22"/></g>
+<!-- large sunny window -->
+<rect x="720" y="0" width="560" height="560" fill="#5b5573"/>
+<rect x="740" y="0" width="520" height="530" fill="#8e9fc0"/>
+<rect x="750" y="0" width="500" height="510" fill="#f4c77f"/>
+<rect x="750" y="270" width="500" height="240" fill="#79916d"/>
+<path d="M750 340l90-90 85 55 70-110 90 70 80-95 85 80v260H750z" fill="#55775c"/>
+<path d="M750 390l130-75 90 45 105-90 175 95v145H750z" fill="#344d4b"/>
+<g fill="#d8b77f" opacity=".75"><rect x="990" y="0" width="18" height="530"/><rect x="1160" y="0" width="18" height="530"/><rect x="740" y="240" width="520" height="18"/></g>
+<rect x="720" y="0" width="22" height="560" fill="#4c3546"/><rect x="1255" y="0" width="25" height="560" fill="#4c3546"/>
+<!-- hanging banner -->
+<path d="M530 0h155v300l-77-42-78 42z" fill="#42244f" stroke="#a46ac9" stroke-width="8"/>
+<path d="M565 95h85v72l-42-30-43 30z" fill="none" stroke="#c28bea" stroke-width="7"/>
+<!-- floor -->
+<path d="M0 690h1600v310H0z" fill="url(#floor)"/>
+<path d="M0 720h1600M0 820h1600M0 930h1600" stroke="#8b6680" stroke-opacity=".25" stroke-width="8"/>
+<path d="M500 690L300 1000M800 690L760 1000M1100 690L1250 1000" stroke="#a87d8f" stroke-opacity=".18" stroke-width="8"/>
+<!-- desk and stacked books -->
+<path d="M0 815h430v185H0z" fill="#241724"/><path d="M0 790h455v35H0z" fill="#71452f"/><path d="M0 785h455v12H0z" fill="#c18b59"/>
+<rect x="30" y="700" width="220" height="62" fill="#26324c" stroke="#bd8c52" stroke-width="7"/><rect x="42" y="710" width="194" height="9" fill="#e4c18a"/>
+<rect x="0" y="755" width="270" height="55" fill="#51304a" stroke="#c38b55" stroke-width="7"/><rect x="18" y="764" width="230" height="8" fill="#e7c48d"/>
+<!-- lamp -->
+<rect x="100" y="550" width="18" height="145" fill="#b07b45"/><path d="M50 565h120l-24-72H76z" fill="#39243c" stroke="#d9a75e" stroke-width="8"/><rect x="73" y="565" width="76" height="105" fill="url(#sun)" opacity=".8"/><rect x="60" y="680" width="100" height="18" fill="#a8794b"/>
+<!-- plant silhouette by window -->
+<rect x="1190" y="520" width="70" height="100" fill="#61416c"/><path d="M1225 520q-90-95-70-130q70 18 70 130q-15-125 40-155q28 60-40 155q40-110 100-92q-8 72-100 92" fill="#4d7957"/>
+<!-- atmospheric lighting and pixel texture -->
+<rect width="1600" height="1000" fill="url(#sun)" opacity=".12"/>
+<rect width="1600" height="1000" fill="url(#pixel)"/>
+<rect width="1600" height="1000" fill="#100d19" opacity=".18"/>
+</svg>
